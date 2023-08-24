@@ -2,9 +2,13 @@ package com.example.InventoryManagementSystem.model;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.persistence.Id;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Getter
 @Setter
@@ -12,11 +16,10 @@ import javax.persistence.Id;
 public class AssetType {
 
     @Id
-    private String id;
+    private Long id;
 
-    private long typeId;
-
+    @Indexed(unique = true)
     private String typeName;
 
-
+    private Map<AssetType, List<Asset>> assets = new HashMap<>();
 }

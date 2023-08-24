@@ -7,14 +7,13 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 @Getter
 @Setter
+
+
 @Document(collection = "assets")
 public class Asset {
 
     @Id
-    private String id;
+    private Long id;
     private String assetName;
-    private String status;
     private AssetType assetType;
-    private User user;
-
 }

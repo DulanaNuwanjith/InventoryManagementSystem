@@ -6,6 +6,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class AssetTypeRequest {
-    private long typeId;
     private String typeName;
+
 }

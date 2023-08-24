@@ -1,12 +1,14 @@
 package com.example.InventoryManagementSystem.service;
 
-import com.example.InventoryManagementSystem.dto.request.AssetTypeRequest;
 import com.example.InventoryManagementSystem.model.AssetType;
 import com.example.InventoryManagementSystem.repository.AssetTypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class AssetTypeService {
@@ -14,70 +16,48 @@ public class AssetTypeService {
     @Autowired
     private AssetTypeRepository assetTypeRepository;
 
-    @Autowired
-    public AssetTypeService(AssetTypeRepository assetTypeRepository) {
-        this.assetTypeRepository = assetTypeRepository;
-    }
-public AssetType addAssetType(AssetTypeRequest assetType) {
-    AssetType newAssetType = new AssetType();
-    Long nextId = getNextAssetTypeId();
-    System.out.println(nextId);
-    newAssetType.setTypeId(nextId);
-    newAssetType.setTypeName(assetType.getTypeName());
+    public AssetType addAssetType(AssetType assetType) {
 
-    return assetTypeRepository.save(newAssetType);
-}
+        Long nextId = getNextAssetTypeId();
+        assetType.setId(nextId);
+
+        return assetTypeRepository.save(assetType);
+    }
     private Long getNextAssetTypeId() {
         List<AssetType> allAssetTypes = assetTypeRepository.findAll();
         if (allAssetTypes.isEmpty()) {
             return 1L;
         }
 
-        Long lastId = allAssetTypes.get(allAssetTypes.size() - 1).getTypeId();
-        System.out.println(lastId);
+        Long lastId = allAssetTypes.get(allAssetTypes.size() - 1).getId();
         return lastId + 1;
     }
-    public boolean deleteAssetType(long typeId) {
-        AssetType assetType = assetTypeRepository.findByTypeId(typeId);
 
-        if (assetType != null) {
-            assetTypeRepository.delete(assetType);
+    public boolean deleteAssetType(Long id) {
+        Optional<AssetType> assetTypeOptional = assetTypeRepository.findById(id);
+
+        if (assetTypeOptional.isPresent()) {
+            assetTypeRepository.delete(assetTypeOptional.get());
             return true;
         } else {
             return false;
         }
     }
 
-    public AssetType updateAssetType(long typeId, AssetTypeRequest updatedAssetType) {
-        AssetType existingAssetType = assetTypeRepository.findByTypeId(typeId);
-
-        if (existingAssetType != null) {
-            existingAssetType.setTypeName(updatedAssetType.getTypeName());
-            return assetTypeRepository.save(existingAssetType);
-        } else {
-            return null;
+    public AssetType updateAssetType(AssetType assetType) {
+        AssetType existingAssetType = assetTypeRepository.findById(assetType.getId()).orElse(null);
+        if (existingAssetType == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Asset type not found");
         }
-    }
 
-    public List<AssetType> findAllAssetTypes() {
-        return assetTypeRepository.findAll();
-    }
+        existingAssetType.setTypeName(assetType.getTypeName());
 
-    public AssetType findAssetTypeByTypeId(long typeId) {
-        return assetTypeRepository.findByTypeId(typeId);
-    }
-
-    public boolean existsByTypeName(String typeName) {
-        return assetTypeRepository.existsByTypeName(typeName);
+        return assetTypeRepository.save(existingAssetType);
     }
 
     public AssetType getAssetTypeById(long id) {
-    //  TODO: Map the correct asset type from DB
-    return new AssetType();
-//        return assetTypeRepository.findById(id);
+        return assetTypeRepository.findById(id).orElse(null);
     }
-
-
 
 }
 
