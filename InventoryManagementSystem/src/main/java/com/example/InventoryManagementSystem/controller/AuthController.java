@@ -1,9 +1,6 @@
 package com.example.InventoryManagementSystem.controller;
 
-import com.example.InventoryManagementSystem.dto.request.LoginRequest;
-import com.example.InventoryManagementSystem.dto.request.RegistrationRequest;
-import com.example.InventoryManagementSystem.dto.request.UpdatePasswordRequest;
-import com.example.InventoryManagementSystem.dto.request.UpdateProfileRequest;
+import com.example.InventoryManagementSystem.dto.request.*;
 import com.example.InventoryManagementSystem.dto.response.JwtResponse;
 import com.example.InventoryManagementSystem.dto.response.MessageResponse;
 import com.example.InventoryManagementSystem.dto.response.UpdateProfileResponse;
@@ -17,6 +14,7 @@ import com.example.InventoryManagementSystem.repository.UserRepository;
 import com.example.InventoryManagementSystem.security.jwt.JwtUtils;
 import com.example.InventoryManagementSystem.service.SequenceGeneratorService;
 import com.example.InventoryManagementSystem.service.UserDetailsImpl;
+import com.example.InventoryManagementSystem.service.UserDetailsServiceImpl;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -63,11 +61,23 @@ public class AuthController {
     @Autowired
     private SequenceGeneratorService service;
 
+    @Autowired
+    private UserDetailsServiceImpl userDetailsService;
+
 
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
         logger.info("The /signin endpoint has been reached");
         try {
+            User user = (User) userRepository.findByUsername(loginRequest.getUsername())
+                    .orElseThrow(() -> new UsernameNotFoundException("User Not Found with username: " + loginRequest.getUsername()));
+
+            if (user.getState() != UserState.ACTIVE) {
+                logger.warn("Inactive user attempting to log in");
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                        .body(new MessageResponse("User is not active. Contact an administrator."));
+            }
+
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
 
@@ -79,7 +89,7 @@ public class AuthController {
                     .map(item -> item.getAuthority())
                     .collect(Collectors.toList());
 
-            logger.info("User {} has successfully logged in", loginRequest.getUsername());
+            logger.info("Active user {} has successfully logged in", loginRequest.getUsername());
             logger.info("Token successfully generated");
             return ResponseEntity.ok(new JwtResponse(jwt,
                     userDetails.getId(),
@@ -98,6 +108,7 @@ public class AuthController {
                     .body(new MessageResponse("User not found"));
         }
     }
+
 
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@Valid @RequestBody RegistrationRequest registrationRequest) {
@@ -175,6 +186,8 @@ public class AuthController {
     }
     @PutMapping("/updateprofile")
     public ResponseEntity<?> updateProfile(@Valid @RequestBody UpdateProfileRequest updateProfileRequest) {
+        logger.info("Received request to update profile.");
+
         UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         User user = userRepository.findById(userDetails.getId())
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with id: " + userDetails.getId()));
@@ -185,28 +198,40 @@ public class AuthController {
 
         userRepository.save(user);
 
+        logger.info("Profile updated successfully for user: {}", userDetails.getUsername());
+
         return ResponseEntity.ok(new UpdateProfileResponse("Profile updated successfully"));
     }
+
     @PutMapping("/updatepassword")
     public ResponseEntity<?> updatePassword(@Valid @RequestBody UpdatePasswordRequest updatePasswordRequest) {
+        logger.info("Received request to update password.");
+
         UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         User user = userRepository.findById(userDetails.getId())
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with id: " + userDetails.getId()));
 
         if (!encoder.matches(updatePasswordRequest.getOldPassword(), user.getPassword())) {
+            logger.warn("Failed to update password for user: {} - Old password is incorrect", userDetails.getUsername());
             return ResponseEntity.badRequest().body(new MessageResponse("Old password is incorrect"));
         }
 
         user.setPassword(encoder.encode(updatePasswordRequest.getNewPassword()));
         userRepository.save(user);
 
+        logger.info("Password updated successfully for user: {}", userDetails.getUsername());
+
         return ResponseEntity.ok(new MessageResponse("Password updated successfully"));
     }
+
     @GetMapping("/users")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<UserResponse>> getAllUsers() {
+        logger.info("Received request to get all users.");
+
         List<User> users = userRepository.findAll();
         List<UserResponse> userResponses = users.stream()
+                .filter(user -> user.getState() == UserState.ACTIVE) // Filter only active users
                 .map(user -> {
                     UserResponse userResponse = new UserResponse();
                     userResponse.setId(user.getId());
@@ -222,7 +247,23 @@ public class AuthController {
                 })
                 .collect(Collectors.toList());
 
+        logger.info("Retrieved {} active users.", userResponses.size());
+
         return ResponseEntity.ok(userResponses);
+    }
+
+    @PutMapping("/updateuserstate/{userId}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<MessageResponse> updateUserState(@PathVariable long userId, @RequestBody UpdateUserStateRequest request) {
+        UserState newState = request.getNewState();
+
+        userDetailsService.updateUserState(userId, newState);
+
+        String action = (newState == UserState.ACTIVE) ? "activated" : "deactivated";
+        logger.info("User with ID {} has been {}.", userId, action);
+
+        String responseMessage = String.format("User %s successfully.", action);
+        return ResponseEntity.ok(new MessageResponse(responseMessage));
     }
 
 }
