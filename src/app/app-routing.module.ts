@@ -10,6 +10,7 @@ import { AssetManagementComponent } from './asset-management/asset-management.co
 import { UserDashboardComponent } from './user-dashboard/user-dashboard.component';
 import { UserProfileManagementComponent } from './user-profile-management/user-profile-management.component';
 import { UserChangePasswordComponent } from './user-change-password/user-change-password.component';
+import { UserViewAssetComponent } from './user-view-asset/user-view-asset.component';
 
 const routes: Routes = [
   {
@@ -51,7 +52,11 @@ const routes: Routes = [
   {
     path: 'user-change-password',
     component: UserChangePasswordComponent
-  }
+  },
+  {
+    path: 'user-view-asset',
+    component: UserViewAssetComponent
+  },
 ];
 
 @NgModule({

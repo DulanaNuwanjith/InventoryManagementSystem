@@ -13,6 +13,7 @@ import { AssetManagementComponent } from './asset-management/asset-management.co
 import { UserProfileManagementComponent } from './user-profile-management/user-profile-management.component';
 import { UserDashboardComponent } from './user-dashboard/user-dashboard.component';
 import { UserChangePasswordComponent } from './user-change-password/user-change-password.component';
+import { UserViewAssetComponent } from './user-view-asset/user-view-asset.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import { UserChangePasswordComponent } from './user-change-password/user-change-
     AssetManagementComponent,
     UserProfileManagementComponent,
     UserDashboardComponent,
-    UserChangePasswordComponent
+    UserChangePasswordComponent,
+    UserViewAssetComponent
   ],
   imports: [
     BrowserModule,
