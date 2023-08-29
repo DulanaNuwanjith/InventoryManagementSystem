@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -21,8 +23,11 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserDetailsImpl implements UserDetails {
+
     @Serial
     private static final long serialVersionUID = 1L;
+
+    private static final Logger logger = LoggerFactory.getLogger(UserDetailsImpl.class);
 
     private Long id;
 
@@ -67,6 +72,7 @@ public class UserDetailsImpl implements UserDetails {
 
     @Override
     public String getUsername() {
+        logger.info("Getting username: {}", username);
         return username;
     }
 
@@ -87,11 +93,13 @@ public class UserDetailsImpl implements UserDetails {
 
     @Override
     public boolean isEnabled() {
+        logger.info("Checking if user is enabled.");
         return true;
     }
 
     @Override
     public boolean equals(Object o) {
+        logger.info("Checking user equality.");
         if (this == o)
             return true;
         if (o == null || getClass() != o.getClass())
@@ -99,5 +107,6 @@ public class UserDetailsImpl implements UserDetails {
         UserDetailsImpl user = (UserDetailsImpl) o;
         return Objects.equals(id, user.id);
     }
+
 }
 
