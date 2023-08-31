@@ -3,7 +3,6 @@ package com.example.InventoryManagementSystem.controller;
 import com.example.InventoryManagementSystem.dto.request.*;
 import com.example.InventoryManagementSystem.dto.response.JwtResponse;
 import com.example.InventoryManagementSystem.dto.response.MessageResponse;
-import com.example.InventoryManagementSystem.dto.response.UpdateProfileResponse;
 import com.example.InventoryManagementSystem.dto.response.UserResponse;
 import com.example.InventoryManagementSystem.model.ERole;
 import com.example.InventoryManagementSystem.model.Role;
@@ -63,6 +62,7 @@ public class AuthController {
 
     @Autowired
     private UserDetailsServiceImpl userDetailsService;
+
 
 
     @PostMapping("/signin")
@@ -186,21 +186,7 @@ public class AuthController {
     }
     @PutMapping("/updateprofile")
     public ResponseEntity<?> updateProfile(@Valid @RequestBody UpdateProfileRequest updateProfileRequest) {
-        logger.info("Received request to update profile.");
-
-        UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        User user = userRepository.findById(userDetails.getId())
-                .orElseThrow(() -> new UsernameNotFoundException("User not found with id: " + userDetails.getId()));
-
-        user.setFirstName(updateProfileRequest.getFirstName());
-        user.setLastName(updateProfileRequest.getLastName());
-        user.setPhoneno(updateProfileRequest.getPhoneno());
-
-        userRepository.save(user);
-
-        logger.info("Profile updated successfully for user: {}", userDetails.getUsername());
-
-        return ResponseEntity.ok(new UpdateProfileResponse("Profile updated successfully"));
+        return userDetailsService.updateProfile(updateProfileRequest);
     }
 
     @PutMapping("/updatepassword")
