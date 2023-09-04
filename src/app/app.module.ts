@@ -16,6 +16,8 @@ import { UserProfileManagementComponent } from './user-profile-management/user-p
 import { UserDashboardComponent } from './user-dashboard/user-dashboard.component';
 import { UserChangePasswordComponent } from './user-change-password/user-change-password.component';
 import { UserViewAssetComponent } from './user-view-asset/user-view-asset.component';
+import { NavBarComponent } from './nav-bar/nav-bar.component';
+import { RouterModule } from '@angular/router';
 
 @NgModule({
   declarations: [
@@ -30,13 +32,15 @@ import { UserViewAssetComponent } from './user-view-asset/user-view-asset.compon
     UserProfileManagementComponent,
     UserDashboardComponent,
     UserChangePasswordComponent,
-    UserViewAssetComponent
+    UserViewAssetComponent,
+    NavBarComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
-    HttpClientModule
+    HttpClientModule,
+    RouterModule
   ],
   providers: [],
   bootstrap: [AppComponent]

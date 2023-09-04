@@ -11,10 +11,11 @@ import { UserDashboardComponent } from './user-dashboard/user-dashboard.componen
 import { UserProfileManagementComponent } from './user-profile-management/user-profile-management.component';
 import { UserChangePasswordComponent } from './user-change-password/user-change-password.component';
 import { UserViewAssetComponent } from './user-view-asset/user-view-asset.component';
+import { NavBarComponent } from './nav-bar/nav-bar.component';
 
 const routes: Routes = [
   {
-    path: '',
+    path: 'home',
     component: HomePageComponent
   },
   {
@@ -57,6 +58,10 @@ const routes: Routes = [
     path: 'user-view-asset',
     component: UserViewAssetComponent
   },
+  {
+    path: 'nav-bar',
+    component: NavBarComponent
+  }
 ];
 
 @NgModule({
