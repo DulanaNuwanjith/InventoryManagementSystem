@@ -12,6 +12,8 @@ import { UserProfileManagementComponent } from './user-profile-management/user-p
 import { UserChangePasswordComponent } from './user-change-password/user-change-password.component';
 import { UserViewAssetComponent } from './user-view-asset/user-view-asset.component';
 import { NavBarComponent } from './nav-bar/nav-bar.component';
+import { AuthGuard } from './_auth/auth.guard';
+import { ForbiddenComponent } from './forbidden/forbidden.component';
 
 const routes: Routes = [
   {
@@ -28,11 +30,13 @@ const routes: Routes = [
   },
   {
     path: 'dashboard',
-    component: DashboardComponent
+    component: DashboardComponent,
+    canActivate:[AuthGuard],
+    data: {roles:['ROLE_ADMIN']}
   },
   {
     path: 'user-management',
-    component: UserManagementComponent
+    component: UserManagementComponent,
   },
   {
     path: 'asset-type-management',
@@ -44,7 +48,9 @@ const routes: Routes = [
   },
   {
     path: 'user-dashboard',
-    component: UserDashboardComponent
+    component: UserDashboardComponent,
+    canActivate:[AuthGuard],
+    data: {roles:['ROLE_USER']}
   },
   {
     path: 'user-profile-management',
@@ -61,6 +67,10 @@ const routes: Routes = [
   {
     path: 'nav-bar',
     component: NavBarComponent
+  },
+  {
+    path: 'forbidden',
+    component: ForbiddenComponent
   }
 ];
 
