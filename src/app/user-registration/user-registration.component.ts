@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { UserService } from '../_services/user.service';
+import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-user-registration',
@@ -6,5 +8,32 @@ import { Component } from '@angular/core';
   styleUrls: ['./user-registration.component.css']
 })
 export class UserRegistrationComponent {
+
+  userData = {
+    firstName: '',
+    lastName: '',
+    phoneno: '',
+    username: '',
+    email: '',
+    password: '',
+  };
+
+  constructor(private userService: UserService) {}
+
+  registerUser(registrationForm: NgForm) {
+    this.userService.register(this.userData)
+      .subscribe(
+        (response) => {
+          console.log('Registration successful:', response);
+          // Clear the form after successful registration
+          registrationForm.resetForm();
+          // Redirect to login or display success message
+        },
+        (error) => {
+          console.error('Registration failed:', error);
+          // Display error message to the user
+        }
+      );
+  }
 
 }

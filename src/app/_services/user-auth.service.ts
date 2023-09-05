@@ -28,8 +28,26 @@ export class UserAuthService {
     localStorage.clear();
   }
 
-  public isLoggedIn(){
-    this.getRoles() && this.getToken();
+  public isLoggedIn(): boolean {
+    return !!this.getRoles() && !!this.getToken();
+  }  
+
+  private isAuthenticated = false;
+
+  logout() {
+  
+    this.isAuthenticated = false;
+    localStorage.clear(); 
+  }
+
+  public login() {
+    // Perform your login logic here
+    // Set isAuthenticated to true upon successful login
+    this.isAuthenticated = true;
+  }
+
+  public isAuthenticatedUser(): boolean {
+    return this.isAuthenticated;
   }
   
 }

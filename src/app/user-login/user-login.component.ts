@@ -15,7 +15,7 @@ export class UserLoginComponent implements OnInit {
   constructor(
     private userService: UserService,
     private userAuthService: UserAuthService,
-    private router: Router
+    private router: Router,
   ) { }
 
   ngOnInit(): void {
@@ -32,6 +32,7 @@ export class UserLoginComponent implements OnInit {
           const roles = response.roles[0]; 
           if (roles === 'ROLE_ADMIN') {
             this.router.navigate(['/dashboard']);
+
           } else {
             this.router.navigate(['/user-dashboard']);
           }
