@@ -1,11 +1,13 @@
 import { Injectable } from '@angular/core';
+import { Observable, Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserAuthService {
-
-  constructor() { }
+  isAuthenticated = new Subject<boolean>();
+  constructor() {
+  }
 
   public setRoles(roles:[]){
     localStorage.setItem('roles', JSON.stringify(roles));
@@ -32,22 +34,22 @@ export class UserAuthService {
     return !!this.getRoles() && !!this.getToken();
   }  
 
-  private isAuthenticated = false;
+  // private isAuthenticated = false;
 
   logout() {
-  
-    this.isAuthenticated = false;
+    this.isAuthenticated.next(false);
     localStorage.clear(); 
   }
 
   public login() {
     // Perform your login logic here
     // Set isAuthenticated to true upon successful login
-    this.isAuthenticated = true;
+    this.isAuthenticated.next(true);
   }
 
-  public isAuthenticatedUser(): boolean {
-    return this.isAuthenticated;
+  public getAuthState(): Observable<boolean> {
+    return this.isAuthenticated.asObservable();
   }
+
   
 }

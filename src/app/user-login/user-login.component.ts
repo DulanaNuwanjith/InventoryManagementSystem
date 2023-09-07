@@ -11,16 +11,18 @@ import { Router } from '@angular/router';
 })
 
 export class UserLoginComponent implements OnInit {
-
   constructor(
     private userService: UserService,
     private userAuthService: UserAuthService,
     private router: Router,
-  ) { }
+  ) {
+
+  }
 
   ngOnInit(): void {
 
   }
+
   login(loginForm: NgForm) {
     this.userService.login(loginForm.value).subscribe(
       (response: any) => {
@@ -28,6 +30,7 @@ export class UserLoginComponent implements OnInit {
         if (response && response.roles) {
           this.userAuthService.setRoles(response.roles);
           this.userAuthService.setToken(response.token);
+          this.userAuthService.login();
   
           const roles = response.roles[0]; 
           if (roles === 'ROLE_ADMIN') {

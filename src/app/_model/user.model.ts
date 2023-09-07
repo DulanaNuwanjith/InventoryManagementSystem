@@ -19,4 +19,5 @@ export class User {
     this.roles = roles;
 
   }
+  
 }

@@ -25,13 +25,10 @@ export class UserRegistrationComponent {
       .subscribe(
         (response) => {
           console.log('Registration successful:', response);
-          // Clear the form after successful registration
           registrationForm.resetForm();
-          // Redirect to login or display success message
         },
         (error) => {
           console.error('Registration failed:', error);
-          // Display error message to the user
         }
       );
   }
