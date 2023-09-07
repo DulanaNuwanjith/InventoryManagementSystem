@@ -53,9 +53,10 @@ export class UserService {
     return this.httpclient.get<any[]>(this.PATH_OF_API + "/users");
   }
 
-  deleteUser(userId: number): Observable<any> {
-    const deleteUrl = `${this.PATH_OF_API}/users/${userId}`;
-    return this.httpclient.delete(deleteUrl);
+  updateUserState(userId: number, newState: string): Observable<any> {
+    return this.httpclient.put<any>(
+      `${this.PATH_OF_API}/updateuserstate/${userId}`,
+      { newState }
+    );
   }
-
 }

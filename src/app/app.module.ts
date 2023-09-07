@@ -22,6 +22,8 @@ import { UserService } from './_services/user.service';
 import { AuthInterceptor } from './_auth/auth.interceptor';
 import { AuthGuard } from './_auth/auth.guard';
 import { ForbiddenComponent } from './forbidden/forbidden.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { AssetTypeService } from './_services/asset-type.service';
 
 @NgModule({
   declarations: [
@@ -45,10 +47,12 @@ import { ForbiddenComponent } from './forbidden/forbidden.component';
     AppRoutingModule,
     FormsModule,
     HttpClientModule,
-    RouterModule
+    RouterModule,
+    BrowserAnimationsModule,
   ],
   providers: [
     AuthGuard,
+    AssetTypeService,
     {
       provide:HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,

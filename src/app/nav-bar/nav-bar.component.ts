@@ -1,16 +1,18 @@
-import { ChangeDetectorRef, Component, HostListener, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { UserAuthService } from '../_services/user-auth.service';
 import { Router } from '@angular/router';
 import { UserService } from '../_services/user.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-nav-bar',
   templateUrl: './nav-bar.component.html',
   styleUrls: ['./nav-bar.component.css']
 })
-export class NavBarComponent implements OnInit{
+export class NavBarComponent implements OnInit, OnDestroy{
   userData: any;
   isAuthenticated: boolean;
+  auth$: Subscription = new Subscription;
 
   constructor(
     private userAuthService: UserAuthService,
@@ -19,33 +21,24 @@ export class NavBarComponent implements OnInit{
     private cdr: ChangeDetectorRef
  
   ) { 
-    this.isAuthenticated = !!localStorage.getItem('jwtToken');
+    this.isAuthenticated = false;
   }
 
   ngOnInit(): void {
-      
+    this.isAuthenticated = this.userAuthService.isLoggedIn();
+    console.log("isLoggedIN", this.userAuthService.isLoggedIn());
+    this.setIsAuthenticated();
   }
 
-  @HostListener('window:storage', ['$event'])
-  onStorageChange(event: StorageEvent) {
-    // log out if local storage is cleared
-    if (!event.key) {
-      this.isAuthenticated = false;
-      this.cdr.detectChanges();
-      return
-    }
+  ngOnDestroy(): void {
+    this.auth$ && this.auth$.unsubscribe();
+  }
 
-    if (event.key === 'jwtToken' && event.newValue) {
-      this.isAuthenticated = true;
+  setIsAuthenticated(): void {
+    this.auth$ = this.userAuthService.isAuthenticated.subscribe(res => {
+      this.isAuthenticated = res;
       this.cdr.detectChanges();
-      return
-    }
-    
-    if (event.key === 'jwtToken' && !event.newValue) {
-      this.isAuthenticated = false;
-      this.cdr.detectChanges();
-      return
-    }
+    })
   }
 
   public isLoggedIn(): boolean {
@@ -54,9 +47,13 @@ export class NavBarComponent implements OnInit{
 
   public logout() {
     console.log('Logout function called');
-    localStorage.removeItem('jwtToken');
-    localStorage.removeItem('roles');
+    this.userAuthService.logout();
     this.userAuthService.clear();
+    this.isAuthenticated = this.userAuthService.isLoggedIn();
+    console.log("isLoggedIN", this.userAuthService.isLoggedIn());
+    
+    this.cdr.detectChanges();
+
     this.router.navigate(['/home']);
   }
 
