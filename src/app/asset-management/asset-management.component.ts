@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { AssetService } from '../_services/asset.service';
 import { Asset } from '../_model/asset.model';
 import { NgForm } from '@angular/forms';
@@ -24,13 +24,15 @@ export class AssetManagementComponent implements OnInit {
   filteredAssets: Asset[] = [];
   searchAssetText: string = '';
   suggestions: string[] = [];
+  selectedAsset: Asset | null = null;
+  originalAsset: Asset | null = null;
 
   assetData = {
     assetName: '',
     typeName: '',
   };
 
-  constructor(private assetService: AssetService) { }
+  constructor(private assetService: AssetService, private cdr: ChangeDetectorRef) { }
 
   ngOnInit(): void {
     this.loadAsset();
@@ -40,6 +42,7 @@ export class AssetManagementComponent implements OnInit {
     this.assetService.getAllAssets().subscribe((data: Asset[]) => {
       this.assets = data;
       this.filteredAssets = data;
+      this.cdr.detectChanges();
     });
   }
 
@@ -48,8 +51,8 @@ export class AssetManagementComponent implements OnInit {
       .subscribe(
         (response) => {
           console.log('Asset type Add successful:', response);
-          addAssetForm.resetForm();
           this.loadAsset();
+          addAssetForm.resetForm();
         },
         (error) => {
           console.error('Asset type Add failed:', error);
@@ -98,6 +101,43 @@ export class AssetManagementComponent implements OnInit {
     ];
   }
   
+  editAsset(asset: Asset) {
+    this.selectedAsset = { ...asset };
+    this.originalAsset = { ...asset };
+  }
+
+  updateAsset(updatedAsset: Asset) {
+    const updateRequest = {
+      user: updatedAsset.user,
+      status: updatedAsset.assetStatus
+    };
+    this.assetService.updateAsset(updatedAsset.assetId, updateRequest).subscribe(
+      (response: any) => {
+        console.log('Asset updated successfully:', response);
+        const index = this.assets.findIndex(asset => asset.assetId === updatedAsset.assetId);
+        if (index !== -1) {
+          this.assets[index] = {
+            ...this.assets[index],
+            assetStatus: updatedAsset.assetStatus,
+            user: updatedAsset.user !== null ? updatedAsset.user : this.assets[index].user
+          };
+        }
+        this.selectedAsset = null;
+      },
+      (error) => {
+        console.error('Asset update failed:', error);
+      }
+    );
+  }
+  
+  cancelEdit() {
+    if (this.originalAsset) {
+      this.selectedAsset = { ...this.originalAsset };
+      this.originalAsset = null;
+    } else {
+      this.selectedAsset = null;
+    }
+  }
 
 
 }

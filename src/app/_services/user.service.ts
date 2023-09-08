@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { UserAuthService } from './user-auth.service';
 import { Observable } from 'rxjs';
+import { UpdatePasswordRequest } from '../_model/updatepasswordrequest.model';
 
 interface LoginData {
   username: string;
@@ -59,4 +60,13 @@ export class UserService {
       { newState }
     );
   }
+
+  getCurrentUserDetails(): Observable<any> {
+    return this.httpclient.get<any>(`${this.PATH_OF_API}/user`);
+  }
+
+  updateUserProfile(updatedProfile: any): Observable<any> {
+    return this.httpclient.put(`${this.PATH_OF_API}/updateprofile`, updatedProfile);
+  }
+
 }
