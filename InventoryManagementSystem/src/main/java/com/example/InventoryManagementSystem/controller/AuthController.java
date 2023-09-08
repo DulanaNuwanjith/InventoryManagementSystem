@@ -26,12 +26,14 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -250,6 +252,25 @@ public class AuthController {
 
         String responseMessage = String.format("User %s successfully.", action);
         return ResponseEntity.ok(new MessageResponse(responseMessage));
+    }
+
+    @GetMapping("/user")
+    public ResponseEntity<Optional<User>> getCurrentUserDetails() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication.isAuthenticated() && authentication.getPrincipal() instanceof UserDetails userDetails) {
+            String username = userDetails.getUsername();
+            logger.info("Attempting to retrieve user details for username: {}", username);
+            Optional<User> user = userDetailsService.getUserByUsername(username);
+            if (user.isPresent()) {
+                logger.info("User details retrieved successfully for username: {}", username);
+                return ResponseEntity.ok(user);
+            } else {
+                logger.warn("User details not found for username: {}", username);
+            }
+        } else {
+            logger.warn("Unauthorized access attempted");
+        }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 
 }

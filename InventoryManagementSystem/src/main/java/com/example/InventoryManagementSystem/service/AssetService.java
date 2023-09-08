@@ -2,6 +2,7 @@ package com.example.InventoryManagementSystem.service;
 
 import com.example.InventoryManagementSystem.dto.request.AssetRequest;
 import com.example.InventoryManagementSystem.dto.request.UpdateAssetRequest;
+import com.example.InventoryManagementSystem.dto.response.UpdateAssetResponse;
 import com.example.InventoryManagementSystem.model.Asset;
 import com.example.InventoryManagementSystem.model.AssetType;
 import com.example.InventoryManagementSystem.model.EStatus;
@@ -13,10 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -31,20 +29,25 @@ public class AssetService {
         this.assetTypeService = assetTypeService;
     }
 
-    public ResponseEntity<String> addAsset(AssetRequest assetRequest) {
+    public ResponseEntity<Map<String, Object>> addAsset(AssetRequest assetRequest) {
+        Map<String, Object> response = new HashMap<>();
+
         String assetName = assetRequest.getAssetName();
         EStatus assetStatus = assetRequest.getAssetStatuses();
 
         if (!assetTypeService.assetTypeExistsByName(assetRequest.getTypeName())) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid asset type name.");
+            response.put("error", "Invalid asset type name.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
 
         if (assetName.length() < 4) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Asset name must have at least 4 characters.");
+            response.put("error", "Asset name must have at least 4 characters.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
 
         if (existsAssetWithAssetName(assetRequest.getAssetName())) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Asset with the same name already exists.");
+            response.put("error", "Asset with the same name already exists.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
 
         AssetType assetType = assetTypeService.getAssetTypeByName(assetRequest.getTypeName());
@@ -52,11 +55,14 @@ public class AssetService {
         try {
             Asset addedAsset = addAsset(assetRequest.getAssetName(), assetType, assetStatus);
 
-            String message = "Asset added successfully with ID: " + addedAsset.getId()
-                    + ", assetId: " + addedAsset.getAssetId();
-            return ResponseEntity.ok(message);
+            response.put("message", "Asset added successfully");
+            response.put("assetId", addedAsset.getAssetId());
+            response.put("assetName", addedAsset.getAssetName());
+
+            return ResponseEntity.ok(response);
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+            response.put("error", e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
     }
 
@@ -93,6 +99,7 @@ public class AssetService {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorMessage);
         }
     }
+
     public boolean deleteAssetByAssetId(UUID assetId) {
         logger.info("Deleting asset with assetId: {}", assetId);
 
@@ -108,14 +115,16 @@ public class AssetService {
         }
     }
 
-    public ResponseEntity<String> updateAsset(UUID assetId, UpdateAssetRequest request) {
+    public ResponseEntity<UpdateAssetResponse> updateAsset(UUID assetId, UpdateAssetRequest request) {
         boolean updated = updateAssetWithRequest(assetId, request);
 
         if (updated) {
-            return ResponseEntity.ok("Asset updated successfully");
+            UpdateAssetResponse response = new UpdateAssetResponse(true, "Asset updated successfully");
+            return ResponseEntity.ok(response);
         } else {
             String message = "Asset not found for assetId: " + assetId;
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(message);
+            UpdateAssetResponse response = new UpdateAssetResponse(false, message);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         }
     }
 
@@ -194,5 +203,16 @@ public class AssetService {
         return assetRepository.findByUser(userId);
     }
 
+    public ResponseEntity<List<Asset>> getAllAsset() {
 
+        List<Asset> asset = assetRepository.findAll();
+
+        logger.info("Retrieved {} assets.", asset.size());
+
+        return ResponseEntity.ok(asset);
+    }
+
+//    public List<Asset> getAssetsByAssetTypeId(UUID assetTypeId) {
+//        return assetRepository.findByAssetTypeAssetId(assetTypeId);
+//    }
 }

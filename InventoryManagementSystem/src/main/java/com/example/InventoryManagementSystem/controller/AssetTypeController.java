@@ -12,7 +12,9 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @PreAuthorize("hasRole('ADMIN')")
@@ -48,8 +50,20 @@ public class AssetTypeController {
 
 
     @DeleteMapping("/{typeId}")
-    public ResponseEntity<String> deleteAssetTypeByTypeId(@PathVariable long typeId) {
-        return assetTypeService.deleteAssetTypeByTypeId(typeId);
+    public ResponseEntity<Map<String, Object>> deleteAssetTypeByTypeId(@PathVariable long typeId) {
+        Map<String, Object> response = new HashMap<>();
+
+        ResponseEntity<String> serviceResponse = assetTypeService.deleteAssetTypeByTypeId(typeId);
+
+        if (serviceResponse.getStatusCode().is2xxSuccessful()) {
+            response.put("status", "success");
+            response.put("message", serviceResponse.getBody());
+        } else {
+            response.put("status", "error");
+            response.put("error", serviceResponse.getBody());
+        }
+
+        return ResponseEntity.status(serviceResponse.getStatusCode()).body(response);
     }
 
 
