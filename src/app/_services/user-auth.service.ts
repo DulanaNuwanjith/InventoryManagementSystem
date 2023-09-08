@@ -1,3 +1,4 @@
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 
@@ -5,8 +6,16 @@ import { Observable, Subject } from 'rxjs';
   providedIn: 'root'
 })
 export class UserAuthService {
+  
+  PATH_OF_API = "http://localhost:8087/api/auth";
+  requestHeader = new HttpHeaders(
+    {
+      "No-Auth": "True"
+    }
+  )
+
   isAuthenticated = new Subject<boolean>();
-  constructor() {
+  constructor(private httpclient: HttpClient,) {
   }
 
   public setRoles(roles:[]){
@@ -34,16 +43,12 @@ export class UserAuthService {
     return !!this.getRoles() && !!this.getToken();
   }  
 
-  // private isAuthenticated = false;
-
   logout() {
     this.isAuthenticated.next(false);
     localStorage.clear(); 
   }
 
   public login() {
-    // Perform your login logic here
-    // Set isAuthenticated to true upon successful login
     this.isAuthenticated.next(true);
   }
 
@@ -51,5 +56,17 @@ export class UserAuthService {
     return this.isAuthenticated.asObservable();
   }
 
+  changePassword(oldPassword: string, newPassword: string): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: 'Bearer ' + localStorage.getItem('accessToken') // Include the user's token
+    });
+
+    const body = {
+      oldPassword: oldPassword,
+      newPassword: newPassword
+    };
+
+    return this.httpclient.put(`${this.PATH_OF_API}/updatepassword`, body, { headers: headers });
+  }
   
 }

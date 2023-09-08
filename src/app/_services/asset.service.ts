@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { Asset } from '../_model/asset.model';
 
 @Injectable({
   providedIn: 'root'
@@ -24,8 +25,15 @@ export class AssetService {
   }
 
   searchAsset(searchText: string): Observable<any[]> {
-    const apiUrl = `your-api-endpoint?search=${searchText}`;
     return this.httpclient.get<any[]>(this.backendUrl + "/all");
+  }
+
+  getUserAssets(): Observable<any[]> {
+    return this.httpclient.get<any[]>(`${this.backendUrl}/my/assets`);
+  }
+
+  updateAsset(assetId: number, updatedAsset: any): Observable<any> {
+    return this.httpclient.put(`${this.backendUrl}/${assetId}`, updatedAsset);
   }
 
 }

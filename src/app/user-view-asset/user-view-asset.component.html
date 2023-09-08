@@ -57,40 +57,16 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr
+                                    <tr *ngFor="let asset of assets"
                                         class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                                         <td class="w-4 p-4">
                                         </td>
                                         <th scope="row"
                                             class="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap">
-                                            Mackbook Pro
+                                            {{ asset.assetName }}
                                         </th>
                                         <td class="px-6 py-4">
-                                            Laptops & Pc's
-                                        </td>
-                                    </tr>
-                                    <tr
-                                        class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                                        <td class="w-4 p-4">
-                                        </td>
-                                        <th scope="row"
-                                            class="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap">
-                                            Mouse - 01
-                                        </th>
-                                        <td class="px-6 py-4">
-                                            Electronic Accessories
-                                        </td>
-                                    </tr>
-                                    <tr
-                                        class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                                        <td class="w-4 p-4">
-                                        </td>
-                                        <th scope="row"
-                                            class="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap">
-                                            Dell
-                                        </th>
-                                        <td class="px-6 py-4">
-                                            Laptops & Pc's
+                                            {{ asset.assetType.typeName }}
                                         </td>
                                     </tr>
                                 </tbody>
