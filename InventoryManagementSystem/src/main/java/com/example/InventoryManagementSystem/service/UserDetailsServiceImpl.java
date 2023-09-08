@@ -16,6 +16,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
     private static final Logger logger = LoggerFactory.getLogger(UserDetailsServiceImpl.class);
@@ -55,6 +57,17 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         logger.info("Profile updated successfully for user: {}", userDetails.getUsername());
 
         return ResponseEntity.ok(new UpdateProfileResponse("Profile updated successfully"));
+    }
+
+    public Optional<User> getUserByUsername(String username) {
+        logger.info("Attempting to retrieve user by username: {}", username);
+        Optional<User> user = userRepository.findByUsername(username);
+        if (user.isPresent()) {
+            logger.info("User found for username: {}", username);
+        } else {
+            logger.warn("User not found for username: {}", username);
+        }
+        return user;
     }
 
 }
