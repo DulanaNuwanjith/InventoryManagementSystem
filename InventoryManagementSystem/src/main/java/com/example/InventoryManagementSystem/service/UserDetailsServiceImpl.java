@@ -70,4 +70,13 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         return user;
     }
 
+    public String findFirstNameByUserId(Long userId) {
+        User user = userRepository.findUserById(userId);
+        if (user != null) {
+            return user.getFirstName();
+        } else {
+            return null;
+        }
+    }
+
 }

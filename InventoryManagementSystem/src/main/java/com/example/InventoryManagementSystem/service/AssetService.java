@@ -212,7 +212,7 @@ public class AssetService {
         return ResponseEntity.ok(asset);
     }
 
-//    public List<Asset> getAssetsByAssetTypeId(UUID assetTypeId) {
-//        return assetRepository.findByAssetTypeAssetId(assetTypeId);
-//    }
+    public List<Asset> getAssetsByAssetTypeName(String typeName) {
+        return assetRepository.findByAssetType(typeName);
+    }
 }

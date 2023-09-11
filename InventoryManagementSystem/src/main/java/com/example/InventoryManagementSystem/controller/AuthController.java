@@ -272,5 +272,15 @@ public class AuthController {
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
+    @GetMapping("/{userId}/firstname")
+    public ResponseEntity<String> getFirstNameByUserId(@PathVariable Long userId) {
+        String firstName = userDetailsService.findFirstNameByUserId(userId);
+
+        if (firstName != null) {
+            return ResponseEntity.ok(firstName);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
 
 }
