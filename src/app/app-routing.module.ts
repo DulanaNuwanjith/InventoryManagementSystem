@@ -14,6 +14,7 @@ import { UserViewAssetComponent } from './user-view-asset/user-view-asset.compon
 import { NavBarComponent } from './nav-bar/nav-bar.component';
 import { AuthGuard } from './_auth/auth.guard';
 import { ForbiddenComponent } from './forbidden/forbidden.component';
+import { AssetPopupComponent } from './asset-popup/asset-popup.component';
 
 const routes: Routes = [
   {
@@ -72,6 +73,11 @@ const routes: Routes = [
     path: 'forbidden',
     component: ForbiddenComponent
   },
+  {
+    path: 'asset-popup',
+    component: AssetPopupComponent
+  },
+
 ];
 
 @NgModule({

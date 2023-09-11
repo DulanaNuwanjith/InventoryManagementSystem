@@ -7,7 +7,7 @@ export class Asset {
     assetType: AssetType
     user: number;
   
-    constructor(assetId: number, assetName: string, assetStatus: string, assetType: AssetType, user: number  ) {
+    constructor(assetId: number, assetName: string, assetStatus: string, assetType: AssetType, user: number, ) {
       this.assetId = assetId;
       this.assetName = assetName;
       this.assetStatus = assetStatus;

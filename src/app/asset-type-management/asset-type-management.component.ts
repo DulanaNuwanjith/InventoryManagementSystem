@@ -1,6 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { AssetTypeService } from '../_services/asset-type.service';
 import { NgForm } from '@angular/forms';
+import { Asset } from '../_model/asset.model';
+import { MatDialog } from '@angular/material/dialog';
+import { AssetPopupComponent } from '../asset-popup/asset-popup.component';
+import { DeleteConfirmationDialogComponent } from '../delete-confirmation-dialog/delete-confirmation-dialog.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 interface AssetType {
   typeId: number;
@@ -19,12 +24,14 @@ export class AssetTypeManagementComponent implements OnInit {
   searchAssetTypeText: string = '';
   suggestions: string[] = [];
   filteredAssetTypes: AssetType[] = [];
+  typeName: string = '';
 
   assetTypeData = {
     typeName: '',
   };
 
-  constructor(private assetTypeService: AssetTypeService) { }
+  constructor(private assetTypeService: AssetTypeService,
+    public dialog: MatDialog, private snackBar: MatSnackBar) { }
 
   ngOnInit(): void {
     this.loadAssetType();
@@ -38,18 +45,29 @@ export class AssetTypeManagementComponent implements OnInit {
   }
 
   addAssetType(addAssetTypeForm: NgForm) {
-    this.assetTypeService.addAssetType(this.assetTypeData)
-      .subscribe(
-        (response) => {
-          console.log('Asset type Add successful:', response);
-          addAssetTypeForm.resetForm();
-          this.loadAssetType();
-        },
-        (error) => {
-          console.error('Asset type Add failed:', error);
-        }
-      );
+    if (addAssetTypeForm.invalid) {
+      return;
+    }
+  
+    this.assetTypeService.addAssetType(this.assetTypeData).subscribe(
+      (response) => {
+        console.log('Asset type Add successful:', response);
+        addAssetTypeForm.resetForm();
+        this.loadAssetType();
+  
+        this.snackBar.open('Asset type added successfully', 'Close', {
+          duration: 3000,
+          horizontalPosition: 'center',
+          verticalPosition: 'top',
+          panelClass: 'success-snackbar',
+        });
+      },
+      (error) => {
+        console.error('Asset type Add failed:', error);
+      }
+    );
   }
+  
 
   searchAssetType() {
     if (this.searchAssetTypeText.trim() === '') {
@@ -92,4 +110,33 @@ export class AssetTypeManagementComponent implements OnInit {
       }
     );
   }
+
+  viewAssetsByTypeName(typeName: string) {
+    console.log(this.filteredAssetTypes)
+    console.log({typeName})
+    this.assetTypeService.getAssetsByAssetTypeName(typeName).subscribe(
+      (assets: Asset[]) => {
+        console.log({assets})
+        const dialogRef = this.dialog.open(AssetPopupComponent, {
+          data: { typeName, assets },
+        });
+      },
+      (error) => {
+        console.error('Error fetching assets:', error);
+      }
+    );
+  }
+  
+  openDeleteConfirmationDialog(typeId: number) {
+    const dialogRef = this.dialog.open(DeleteConfirmationDialogComponent, {
+        data: typeId,
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+        if (result === true) {
+            this.deleteAssetTypeByTypeId(typeId);
+        }
+    });
+}
+
 }

@@ -2,16 +2,12 @@ import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { AssetService } from '../_services/asset.service';
 import { Asset } from '../_model/asset.model';
 import { NgForm } from '@angular/forms';
+import { AssetTypeService } from '../_services/asset-type.service';
+import { UserService } from '../_services/user.service';
+import { DeleteConfirmationDialogComponent } from '../delete-confirmation-dialog/delete-confirmation-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
-// interface Asset {
-//   assetId: number;
-//   assetName: string;
-//   assetStatus: string;
-//   assetType: {
-//     typeName: string;
-//   };
-//   user: number;
-// }
 
 @Component({
   selector: 'app-asset-management',
@@ -26,17 +22,34 @@ export class AssetManagementComponent implements OnInit {
   suggestions: string[] = [];
   selectedAsset: Asset | null = null;
   originalAsset: Asset | null = null;
+  assetTypes: any[] = [];
+  users: any[] = [];
 
   assetData = {
     assetName: '',
     typeName: '',
   };
 
-  constructor(private assetService: AssetService, private cdr: ChangeDetectorRef) { }
+  constructor(private assetService: AssetService, private cdr: ChangeDetectorRef, private assetTypeService: AssetTypeService, private userService: UserService, private dialog: MatDialog, private snackBar: MatSnackBar) { }
 
   ngOnInit(): void {
     this.loadAsset();
+    this.loadAssetTypes();
+    this.loadUsers();
   }
+
+  loadUsers() {
+    this.userService.getUsers().subscribe(
+      (data: any[]) => {
+        console.log('Response from getUsers API:', data);
+        this.users = data;
+      },
+      (error) => {
+        console.error('Error fetching users:', error);
+      }
+    );
+  }
+
 
   loadAsset() {
     this.assetService.getAllAssets().subscribe((data: Asset[]) => {
@@ -47,17 +60,23 @@ export class AssetManagementComponent implements OnInit {
   }
 
   addAsset(addAssetForm: NgForm) {
-    this.assetService.addAsset(this.assetData)
-      .subscribe(
-        (response) => {
-          console.log('Asset type Add successful:', response);
-          this.loadAsset();
-          addAssetForm.resetForm();
-        },
-        (error) => {
-          console.error('Asset type Add failed:', error);
-        }
-      );
+    this.assetService.addAsset(this.assetData).subscribe(
+      (response) => {
+        console.log('Asset type Add successful:', response);
+        this.loadAsset();
+        addAssetForm.resetForm();
+        
+        this.snackBar.open('Asset added successfully', 'Close', {
+          duration: 3000,
+          horizontalPosition: 'center',
+          verticalPosition: 'top',
+          panelClass: ['success-snackbar'],
+        });
+      },
+      (error) => {
+        console.error('Asset type Add failed:', error);
+      }
+    );
   }
 
   deleteAssetById(assetId: number) {
@@ -87,20 +106,20 @@ export class AssetManagementComponent implements OnInit {
       });
     }
   }
-  
+
   selectSuggestion(suggestion: string) {
     this.searchAssetText = suggestion;
     this.searchAsset();
     this.suggestions = [];
   }
-  
+
   showSuggestions() {
     this.suggestions = [
       `Suggestion 1 for ${this.searchAssetText}`,
       `Suggestion 2 for ${this.searchAssetText}`,
     ];
   }
-  
+
   editAsset(asset: Asset) {
     this.selectedAsset = { ...asset };
     this.originalAsset = { ...asset };
@@ -123,13 +142,19 @@ export class AssetManagementComponent implements OnInit {
           };
         }
         this.selectedAsset = null;
+        this.snackBar.open('Asset updated successfully', 'Close', {
+          duration: 3000,
+          horizontalPosition: 'center',
+          verticalPosition: 'top',
+          panelClass: ['success-snackbar'],
+        });
       },
       (error) => {
         console.error('Asset update failed:', error);
       }
     );
   }
-  
+
   cancelEdit() {
     if (this.originalAsset) {
       this.selectedAsset = { ...this.originalAsset };
@@ -139,5 +164,32 @@ export class AssetManagementComponent implements OnInit {
     }
   }
 
+  loadAssetTypes() {
+    this.assetTypeService.getAllAssetTypes().subscribe(
+      (data: any[]) => {
+        this.assetTypes = data;
+      },
+      (error) => {
+        console.error('Error fetching asset types:', error);
+      }
+    );
+  }
+
+  toggleDropdown(event: MouseEvent) {
+    const selectElement = event.target as HTMLSelectElement;
+    selectElement.focus();
+  }
+
+  openDeleteConfirmationDialog(asset: Asset) {
+    const dialogRef = this.dialog.open(DeleteConfirmationDialogComponent, {
+      data: asset,
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result === true) {
+        this.deleteAssetById(asset.assetId);
+      }
+    });
+  }
 
 }
