@@ -24,6 +24,10 @@ import { AuthGuard } from './_auth/auth.guard';
 import { ForbiddenComponent } from './forbidden/forbidden.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AssetTypeService } from './_services/asset-type.service';
+import { AssetPopupComponent } from './asset-popup/asset-popup.component';
+import { MatDialogModule } from '@angular/material/dialog';
+import { DeleteConfirmationDialogComponent } from './delete-confirmation-dialog/delete-confirmation-dialog.component';
+import { MatSnackBarModule, matSnackBarAnimations } from '@angular/material/snack-bar';
 
 @NgModule({
   declarations: [
@@ -41,6 +45,8 @@ import { AssetTypeService } from './_services/asset-type.service';
     UserViewAssetComponent,
     NavBarComponent,
     ForbiddenComponent,
+    AssetPopupComponent,
+    DeleteConfirmationDialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -50,7 +56,9 @@ import { AssetTypeService } from './_services/asset-type.service';
     RouterModule,
     BrowserAnimationsModule,
     BrowserModule, 
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatDialogModule,
+    MatSnackBarModule,
   ],
   providers: [
     AuthGuard,

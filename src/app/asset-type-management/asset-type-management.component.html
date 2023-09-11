@@ -114,11 +114,11 @@
                                             {{ assetType.typeName }}
                                         </td>
                                         <td class="px-6 py-4 text-right flex justify-between">
-                                            <a href="#"
-                                                class="font-medium text-green-600 dark:text-green-500 hover:underline">View</a>
+                                            <button  (click)="viewAssetsByTypeName(assetType.typeName)"
+                                                class="font-medium text-green-600 dark:text-green-500 hover:underline" >View</button>
                                             <a href="javascript:void(0);"
                                                 class="font-medium text-red-600 dark:text-red-500 hover:underline"
-                                                (click)="deleteAssetTypeByTypeId(assetType.typeId)">Delete</a>
+                                                (click)="openDeleteConfirmationDialog(assetType.typeId)">Delete</a>
                                         </td>
                                     </tr>
                                 </tbody>

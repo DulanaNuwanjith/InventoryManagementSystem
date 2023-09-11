@@ -8,6 +8,7 @@ import { Observable } from 'rxjs';
 export class AssetTypeService {
 
   backendUrl = 'http://localhost:8087/api/asset-types'; 
+  Url = 'http://localhost:8087/api/assets';
 
   constructor(private httpclient: HttpClient) { }
 
@@ -27,4 +28,9 @@ export class AssetTypeService {
   deleteAssetTypeByTypeId(typeId: number): Observable<any> {
     return this.httpclient.delete(`${this.backendUrl}/${typeId}`);
   }
+
+  getAssetsByAssetTypeName(typeName: string): Observable<any[]> {
+    return this.httpclient.get<any[]>(`${this.Url}/byAssetTypeName/${typeName}`);
+  }
+  
 }

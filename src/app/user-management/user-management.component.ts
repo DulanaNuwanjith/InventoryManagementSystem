@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from '../_services/user.service';
+import { DeleteConfirmationDialogComponent } from '../delete-confirmation-dialog/delete-confirmation-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-user-management',
@@ -11,7 +13,7 @@ export class UserManagementComponent implements OnInit {
   searchText: string = '';
   suggestions: string[] = [];
 
-  constructor(private userService: UserService) { }
+  constructor(private userService: UserService, private dialog: MatDialog) { }
 
   ngOnInit(): void {
     this.userService.getUsers().subscribe((data) => {
@@ -26,12 +28,10 @@ export class UserManagementComponent implements OnInit {
   }
 
   deleteUser(userId: number) {
-    if (confirm('Are you sure you want to delete this user?')) {
       const newState = 'INACTIVE';
       this.userService.updateUserState(userId, newState).subscribe(() => {
         this.loadUsers();
       });
-    }
   }
 
   searchUsers() {
@@ -72,6 +72,18 @@ export class UserManagementComponent implements OnInit {
       this.suggestions.push(`Suggestion for ${suggestion}`);
     }
   }
+  openDeleteConfirmationDialog(userId: number) {
+    const dialogRef = this.dialog.open(DeleteConfirmationDialogComponent, {
+        data: userId,
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+        if (result === true) {
+            this.deleteUser(userId);
+        }
+    });
+}
+
   
   
 
