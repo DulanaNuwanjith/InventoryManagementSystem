@@ -105,16 +105,9 @@ public class AssetController {
         return assetService.getAllAsset();
     }
 
-//    @GetMapping("/by-asset-type/{assetTypeId}")
-//    public ResponseEntity<List<Asset>> getAssetsByAssetTypeId(@PathVariable UUID assetTypeId) {
-//        logger.info("Received request to get assets by asset type ID: {}", assetTypeId);
-//        List<Asset> assets = assetService.getAssetsByAssetTypeId(assetTypeId);
-//
-//        if (assets.isEmpty()) {
-//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(assets);
-//        } else {
-//            return ResponseEntity.ok(assets);
-//        }
-//    }
+    @GetMapping("/byAssetTypeName/{typeName}")
+    public List<Asset> getAssetsByAssetTypeName(@PathVariable String typeName) {
+        return assetService.getAssetsByAssetTypeName(typeName);
+    }
 
 }

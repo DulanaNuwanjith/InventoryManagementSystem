@@ -20,8 +20,6 @@ public class Asset {
     private AssetType assetType;
     private Long user;
 
-    public Asset() {
-        this.assetType = assetType;
-    }
+
     
 }
