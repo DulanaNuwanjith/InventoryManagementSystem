@@ -1,8 +1,6 @@
 <body class="leading-normal tracking-normal text-white gradient" style="font-family: 'Source Sans Pro', sans-serif;">
-    <!--Hero-->
     <div class="pt-24">
         <div class="container px-3 mx-auto flex flex-wrap flex-col md:flex-row items-center">
-            <!--Left Col-->
             <div class="flex flex-col w-full md:w-2/5 justify-center items-start text-center md:text-left">
                 <h1 class="h-12">
                 </h1>
@@ -69,6 +67,13 @@
                                             {{ asset.assetType.typeName }}
                                         </td>
                                     </tr>
+                                    <ng-container *ngIf="assets.length === 0">
+                                        <tr>
+                                            <td colspan="3" class="text-gray-500 dark:text-gray-400 text-center py-4">
+                                                You have not assigned any assets.
+                                            </td>
+                                        </tr>
+                                    </ng-container>
                                 </tbody>
                             </table>
                         </div>

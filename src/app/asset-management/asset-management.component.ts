@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { AssetService } from '../_services/asset.service';
 import { Asset } from '../_model/asset.model';
-import { NgForm } from '@angular/forms';
+import { FormControl, FormGroup, NgForm, Validators } from '@angular/forms';
 import { AssetTypeService } from '../_services/asset-type.service';
 import { UserService } from '../_services/user.service';
 import { DeleteConfirmationDialogComponent } from '../delete-confirmation-dialog/delete-confirmation-dialog.component';
@@ -24,13 +24,16 @@ export class AssetManagementComponent implements OnInit {
   originalAsset: Asset | null = null;
   assetTypes: any[] = [];
   users: any[] = [];
+  shouldShowAddAsset: boolean = false;
 
   assetData = {
     assetName: '',
     typeName: '',
   };
 
-  constructor(private assetService: AssetService, private cdr: ChangeDetectorRef, private assetTypeService: AssetTypeService, private userService: UserService, private dialog: MatDialog, private snackBar: MatSnackBar) { }
+
+  constructor(private assetService: AssetService, private cdr: ChangeDetectorRef, private assetTypeService: AssetTypeService, private userService: UserService, private dialog: MatDialog, private snackBar: MatSnackBar) {
+  }
 
   ngOnInit(): void {
     this.loadAsset();
@@ -43,6 +46,8 @@ export class AssetManagementComponent implements OnInit {
       (data: any[]) => {
         console.log('Response from getUsers API:', data);
         this.users = data;
+        console.log(this.users);
+
       },
       (error) => {
         console.error('Error fetching users:', error);
@@ -65,7 +70,7 @@ export class AssetManagementComponent implements OnInit {
         console.log('Asset type Add successful:', response);
         this.loadAsset();
         addAssetForm.resetForm();
-        
+
         this.snackBar.open('Asset added successfully', 'Close', {
           duration: 3000,
           horizontalPosition: 'center',
@@ -122,47 +127,81 @@ export class AssetManagementComponent implements OnInit {
 
   editAsset(asset: Asset) {
     this.selectedAsset = { ...asset };
+    console.log(this.selectedAsset);
+
     this.originalAsset = { ...asset };
   }
 
   updateAsset(updatedAsset: Asset) {
-    const updateRequest = {
-      user: updatedAsset.user,
-      status: updatedAsset.assetStatus
-    };
-    this.assetService.updateAsset(updatedAsset.assetId, updateRequest).subscribe(
-      (response: any) => {
-        console.log('Asset updated successfully:', response);
-        const index = this.assets.findIndex(asset => asset.assetId === updatedAsset.assetId);
-        if (index !== -1) {
-          this.assets[index] = {
-            ...this.assets[index],
-            assetStatus: updatedAsset.assetStatus,
-            user: updatedAsset.user !== null ? updatedAsset.user : this.assets[index].user
-          };
-        }
-        this.selectedAsset = null;
-        this.snackBar.open('Asset updated successfully', 'Close', {
-          duration: 3000,
-          horizontalPosition: 'center',
-          verticalPosition: 'top',
-          panelClass: ['success-snackbar'],
-        });
-      },
-      (error) => {
-        console.error('Asset update failed:', error);
+    if (updatedAsset.assetStatus === 'IN_USE' && updatedAsset.user === null) {
+      this.snackBar.open('Please select a user when the status is IN USE.', 'Close', {
+        duration: 3000,
+        horizontalPosition: 'center',
+        verticalPosition: 'top',
+        panelClass: ['error-snackbar'],
+      });
+    } else {
+
+      const isUserSelected = updatedAsset.user !== null;
+
+      if (!isUserSelected) {
+        updatedAsset.user = null;
       }
-    );
+
+      const updateRequest = {
+        user: updatedAsset.user,
+        status: updatedAsset.assetStatus
+      };
+
+      this.assetService.updateAsset(updatedAsset.assetId, updateRequest).subscribe(
+        (response: any) => {
+          console.log('Asset updated successfully:', response);
+          const index = this.assets.findIndex(asset => asset.assetId === updatedAsset.assetId);
+          if (index !== -1) {
+            this.assets[index] = {
+              ...this.assets[index],
+              assetStatus: updatedAsset.assetStatus,
+              user: updatedAsset.user
+            };
+          }
+          this.selectedAsset = null;
+          this.snackBar.open(`Asset ${updatedAsset.assetName} updated successfully`, 'Close', {
+            duration: 3000,
+            horizontalPosition: 'center',
+            verticalPosition: 'top',
+            panelClass: ['success-snackbar'],
+          });
+          this.loadAsset();
+        },
+        (error) => {
+          console.error('Asset update failed:', error);
+          this.snackBar.open('Failed to update asset', 'Close', {
+            duration: 3000,
+            horizontalPosition: 'center',
+            verticalPosition: 'top',
+            panelClass: ['error-snackbar'],
+          });
+        }
+      );
+    }
   }
 
   cancelEdit() {
     if (this.originalAsset) {
       this.selectedAsset = { ...this.originalAsset };
       this.originalAsset = null;
+
+      this.snackBar.open('Edit canceled', 'Close', {
+        duration: 3000,
+        horizontalPosition: 'center',
+        verticalPosition: 'top',
+        panelClass: ['info-snackbar'],
+      });
     } else {
       this.selectedAsset = null;
     }
   }
+
 
   loadAssetTypes() {
     this.assetTypeService.getAllAssetTypes().subscribe(
@@ -192,4 +231,28 @@ export class AssetManagementComponent implements OnInit {
     });
   }
 
+  getStatusDisplayName(assetStatus: string): string {
+    switch (assetStatus) {
+      case 'IN_USE':
+        return 'IN USE';
+      case 'AVAILABLE':
+        return 'AVAILABLE';
+      case 'UNDER_REPAIR':
+        return 'UNDER REPAIR';
+      default:
+        return 'Other';
+    }
+  }
+
+  onAssetStatusChange() {
+    if (this.selectedAsset && (this.selectedAsset.assetStatus === 'UNDER_REPAIR' || this.selectedAsset.assetStatus === 'AVAILABLE')) {
+      this.selectedAsset.user = null;
+    }
+  }
+
+  getUserNameById(id: any) {
+    console.log(this.users)
+    const user = this.users.find(u => u.id === id);
+    if (user) return user?.firstName;
+  }
 }

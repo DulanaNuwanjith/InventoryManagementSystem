@@ -42,13 +42,13 @@
                             <form (ngSubmit)="addAssetType(addAssetTypeForm)" #addAssetTypeForm="ngForm">
                                 <div class="">
                                     <div class="p-4 flex justify-between">
-                                        <div class="flex">
+                                        <div class="flex shadow-md rounded-br-3xl px-8 ">
                                             <label for="Add asset types" class="sr-only">Add</label>
                                             <div class="relative mt-1">
                                                 <input type="text"
                                                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-80 pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 mb-2"
                                                     id="typeName" [(ngModel)]="assetTypeData.typeName" name="typeName"
-                                                    required placeholder="Add Asset type">
+                                                    required placeholder="Asset type Name ( least 4 characters )">
                                             </div>
                                             <div>
                                                 <button type="submit"
@@ -56,11 +56,10 @@
                                                     style="background: linear-gradient(to right, #ee7724, #d8363a, #dd3675);">Add</button>
                                             </div>
                                         </div>
-
                                         <div>
                                             <div class="flex">
                                                 <label for="table-search" class="sr-only">Search</label>
-                                                <div class="relative mt-1">
+                                                <div class="relative mt-4">
                                                     <div
                                                         class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                                                         <svg class="w-5 h-5 text-gray-500 dark:text-gray-400"
@@ -78,7 +77,6 @@
                                                         (input)="searchAssetType()">
                                                 </div>
                                             </div>
-
                                         </div>
                                     </div>
                                 </div>
@@ -107,15 +105,15 @@
                                         <td class="w-4 p-4">
                                         </td>
                                         <th scope="row"
-                                            class="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap mr-20">
+                                            class="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap">
                                             {{ assetType.typeId }}
                                         </th>
                                         <td class="px-6 py-4">
                                             {{ assetType.typeName }}
                                         </td>
                                         <td class="px-6 py-4 text-right flex justify-between">
-                                            <button  (click)="viewAssetsByTypeName(assetType.typeName)"
-                                                class="font-medium text-green-600 dark:text-green-500 hover:underline" >View</button>
+                                            <button (click)="viewAssetsByTypeName(assetType.typeName)"
+                                                class="font-medium text-green-600 dark:text-green-500 hover:underline">View</button>
                                             <a href="javascript:void(0);"
                                                 class="font-medium text-red-600 dark:text-red-500 hover:underline"
                                                 (click)="openDeleteConfirmationDialog(assetType.typeId)">Delete</a>

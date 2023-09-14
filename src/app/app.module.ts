@@ -28,6 +28,7 @@ import { AssetPopupComponent } from './asset-popup/asset-popup.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { DeleteConfirmationDialogComponent } from './delete-confirmation-dialog/delete-confirmation-dialog.component';
 import { MatSnackBarModule, matSnackBarAnimations } from '@angular/material/snack-bar';
+import { TermsAndConditionsComponent } from './terms-and-conditions/terms-and-conditions.component';
 
 @NgModule({
   declarations: [
@@ -47,6 +48,8 @@ import { MatSnackBarModule, matSnackBarAnimations } from '@angular/material/snac
     ForbiddenComponent,
     AssetPopupComponent,
     DeleteConfirmationDialogComponent,
+    TermsAndConditionsComponent,
+
   ],
   imports: [
     BrowserModule,

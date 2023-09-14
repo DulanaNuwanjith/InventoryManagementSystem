@@ -1,13 +1,14 @@
 import { AssetType } from "./asset-type.model";
+import { User } from "./user.model";
 
 export class Asset {
     assetId: number;
     assetName: string;
     assetStatus: string;
     assetType: AssetType
-    user: number;
+    user: User | null;
   
-    constructor(assetId: number, assetName: string, assetStatus: string, assetType: AssetType, user: number, ) {
+    constructor(assetId: number, assetName: string, assetStatus: string, assetType: AssetType, user: User, ) {
       this.assetId = assetId;
       this.assetName = assetName;
       this.assetStatus = assetStatus;

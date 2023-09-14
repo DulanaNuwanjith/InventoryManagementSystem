@@ -58,7 +58,7 @@ export class UserAuthService {
 
   changePassword(oldPassword: string, newPassword: string): Observable<any> {
     const headers = new HttpHeaders({
-      Authorization: 'Bearer ' + localStorage.getItem('accessToken') // Include the user's token
+      Authorization: 'Bearer ' + localStorage.getItem('accessToken')
     });
 
     const body = {

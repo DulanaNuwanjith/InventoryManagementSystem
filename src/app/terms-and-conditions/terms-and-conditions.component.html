@@ -1,14 +1,10 @@
 <body class="leading-normal tracking-normal text-white gradient" style="font-family: 'Source Sans Pro', sans-serif;">
     <div class="pt-24">
-        <div class="container px-3 mx-auto flex flex-wrap flex-col md:flex-row items-center">
-            <!--Left Col-->
-            <div class="flex flex-col w-full md:w-2/5 justify-center items-start text-center md:text-left">
-                <h1 class="h-12">
-                </h1>
-            </div>
+        <div class="container px-3 mx-auto flex flex-wrap flex-col md:flex-row items-center justify-evenly">
+
         </div>
     </div>
-    <div class="relative -mt-18 lg:-mt-36">
+    <div class="relative -mt-12 lg:-mt-24">
         <svg viewBox="0 0 1428 174" version="1.1" xmlns="http://www.w3.org/2000/svg"
             xmlns:xlink="http://www.w3.org/1999/xlink">
             <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
@@ -31,104 +27,96 @@
             </g>
         </svg>
     </div>
-    <div class="bg-white">
-        <div class="ml-24 mr-24 bg-white">
-            <section class="bg-white border-b py-8 ">
-                <div style="font-family: 'Source Sans Pro', sans-serif;">
-                    <a class="w-full my-2 text-4xl font-semibold leading-tight text-center text-gray-600">
-                        User Profile Management
-                    </a>
-                    <div class="mt-6">
-                        <form [formGroup]="profileForm" (ngSubmit)="updateProfile()">
-                            <div
-                                class="bg-white p-3 shadow-sm rounded-sm dark:border dark:bg-gray-800 dark:border-gray-700 mb-5">
-                                <div class="flex justify-between">
-                                    <div
-                                        class="mt-4 mb-3 flex items-center space-x-2 text-3xl font-bold text-gray-900 leading-8">
-                                        <span clas="text-green-500">
-                                            <svg class="h-5" xmlns="http://www.w3.org/2000/svg" fill="none"
-                                                viewBox="0 0 24 24" stroke="currentColor">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                                            </svg>
-                                        </span>
-                                        <span class="tracking-wide">About</span>
-                                    </div>
-                                    <div>
-                                        <button type="submit"
-                                            class="mt-1 ml-2 text-white focus:ring-4  font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center shadow-lg focus:outline-none focus:shadow-outline transform transition hover:scale-105 duration-300 ease-in-out"
-                                            style="background: linear-gradient(to right, #ee7724, #d8363a, #dd3675);">Save</button>
-                                    </div>
-                                </div>
-                                <div class="text-gray-700 mb-5" *ngIf="userDetails">
-                                    <div class="grid md:grid-cols-2 text-sm">
-                                        <div class="grid grid-cols-2">
-                                            <div class="px-4 py-2 font-semibold">First Name :</div>
-                                            <input class="px-4 py-2 border rounded" value="{{ userDetails.firstName }}"
-                                                type="text" id="firstName" formControlName="firstName">
-                                        </div>
-                                        <div class="grid grid-cols-2">
-                                            <div class="px-4 py-2 font-semibold">Last Name :</div>
-                                            <input class="px-4 py-2 border rounded" value="{{ userDetails.lastName }}"
-                                                type="text" id="lastName" formControlName="lastName">
-                                        </div>
-                                        <div class="grid grid-cols-2 mt-2">
-                                            <div class="px-4 py-2 font-semibold">Contact No :</div>
-                                            <input class="px-4 py-2 border rounded" value="{{ userDetails.phoneno }}"
-                                                type="text" id="phoneno" formControlName="phoneno">
-                                        </div>
-                                        <div class="grid grid-cols-2 mt-2">
-                                            <div class="px-4 py-2 font-semibold">Email :</div>
-                                            <div class="px-4 py-2 border rounded">{{ userDetails.email }}</div>
-                                        </div>
-                                        <div class="mt-2 text-red-500"
-                                            *ngIf="profileForm.get('firstName')?.hasError('required')">
-                                            First Name is required.
-                                        </div>
-                                        <div class="mt-2 text-red-500"
-                                            *ngIf="profileForm.get('firstName')?.hasError('pattern')">
-                                            First Name must contain only letters.
-                                        </div>
-                                        <div class="mt-2 text-red-500"
-                                            *ngIf="profileForm.get('lastName')?.hasError('required')">
-                                            Last Name is required.
-                                        </div>
-                                        <div class="mt-2 text-red-500"
-                                            *ngIf="profileForm.get('lastName')?.hasError('pattern')">
-                                            Last Name must contain only letters.
-                                        </div>
-                                        <div class="mt-2 text-red-500"
-                                            *ngIf="profileForm.get('phoneno')?.hasError('required')">
-                                            Contact No is required.
-                                        </div>
-                                        <div class="mt-2 text-red-500"
-                                            *ngIf="profileForm.get('phoneno')?.hasError('pattern')">
-                                            Only Can use numeric values & Contact No must be 9 digits(without first 0).
-                                        </div>
+    <section class="bg-white border-b py-8">
+        <div
+            class="container max-w-5xl mx-auto m-8 w-full my-2 text-base  font-semibold leading-tight text-left text-gray-800">
+            <div class="text-center text-3xl font-sans font-semibold mb-10">
+                <p>Terms and Conditions</p>
+            </div>
 
-                                    </div>
-                                </div>
-                                <p class="text-blue-500 text-center text-base hover:underline "><a
-                                        href="http://localhost:4200/user-change-password">Reset Password</a></p>
-                            </div>
-                        </form>
+            1. Acceptance of Terms <br>
+            <div class="font-normal mt-1">
+                By accessing or using our inventory management system ("SmartStock System"), you agree to comply with and be
+                bound by these Terms and Conditions. <br><br>
+            </div>
 
-                        <p class="mt-5 text-gray-500 ">Elevating my digital presence with a profile update!
-                        </p>
-                        <div class="mt-6">
-                            <a href="http://localhost:4200/user-dashboard">
-                                <button type="submit"
-                                    class="mt-1 ml-2 text-white focus:ring-4  font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center shadow-lg focus:outline-none focus:shadow-outline transform transition hover:scale-105 duration-300 ease-in-out"
-                                    style="background: linear-gradient(to right, #ee7724, #d8363a, #dd3675);">Back</button>
-                            </a>
-                        </div>
-                    </div>
+            2. User Accounts <br>
+            <div class="font-normal mt-1">
+                Users must create an account to access the System.
+                Users are responsible for maintaining the security and confidentiality of their account credentials.
+                Users are responsible for all activities that occur under their account. <br><br>
+            </div>
 
-                </div>
-            </section>
+
+            3. System Access and Usage <br>
+            <div class="font-normal mt-1">
+                Access to the System is provided on an "as-is" and "as-available" basis.
+                Users may not attempt to gain unauthorized access to the System or its data.
+                Users shall not use the System for any unlawful or prohibited purpose. <br><br>
+            </div>
+
+
+            4. Data Privacy <br>
+            <div class="font-normal mt-1">
+                We collect and store user data in accordance with our Privacy Policy
+                Users grant us the right to use their data for the purposes outlined in the Privacy Policy. <br><br>
+            </div>
+
+
+            5. Intellectual Property <br>
+            <div class="font-normal mt-1">
+                The System and its content are protected by intellectual property laws.
+                Users may not reproduce, modify, or distribute any part of the System without explicit permission.
+                <br><br>
+            </div>
+
+
+            6. Support and Maintenance <br>
+            <div class="font-normal mt-1">
+                We will provide technical support and maintenance as outlined in the Service Level Agreement (SLA).
+                <br><br>
+            </div>
+
+
+            7. Termination <br>
+            <div class="font-normal mt-1">
+                We reserve the right to suspend or terminate user accounts for violations of these terms or for any
+                other reason.Upon termination, users must cease using the System, and their data may be deleted.
+                <br><br>
+            </div>
+
+
+            8. Liability <br>
+            <div class="font-normal mt-1">
+                We are not liable for any loss, damage, or injury arising from the use or inability to use the System.
+                Users agree to indemnify and hold us harmless from any claims or damages resulting from their use of the
+                System. <br><br>
+            </div>
+
+
+            9. Changes to Terms <br>
+            <div class="font-normal mt-1">
+                We reserve the right to modify these Terms and Conditions at any time.
+                Users will be notified of changes, and continued use of the System implies acceptance of the modified
+                terms. <br><br>
+            </div>
+
+
+            10. Governing Law <br>
+            <div class="font-normal mt-1">
+                - These Terms and Conditions are governed by and construed in accordance with the laws of. <br>
+                - Any disputes arising from or relating to these terms shall be subject to the exclusive jurisdiction of
+                the courts in. <br><br>
+            </div>
+
+
+            11. Contact Information <br>
+            <div class="font-normal mt-1">
+                - For inquiries or concerns related to these Terms and Conditions, please contact.
+            </div>
 
         </div>
-    </div>
+    </section>
 
     <div style="background: linear-gradient(to right, #ee7724, #d8363a, #dd3675, #b44593)">
         <section class="container mx-auto text-center py-6 justify-center">
