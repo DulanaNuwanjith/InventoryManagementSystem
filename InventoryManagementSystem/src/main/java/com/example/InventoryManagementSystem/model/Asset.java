@@ -19,7 +19,4 @@ public class Asset {
     private EStatus assetStatus;
     private AssetType assetType;
     private Long user;
-
-
-    
 }
