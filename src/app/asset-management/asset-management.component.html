@@ -43,23 +43,8 @@
                             <form (ngSubmit)="addAsset(addAssetForm)" #addAssetForm="ngForm">
                                 <div class="">
                                     <div class="p-4 flex justify-between">
-                                        <div>
-                                            <div class="flex">
-                                                <label for="Add asset types" class="sr-only">Add</label>
-                                                <div class="relative mt-1">
-                                                    <input type="text" id="table-search"
-                                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-80 pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 mb-2"
-                                                        id="assetName" [(ngModel)]="assetData.assetName"
-                                                        name="assetName" required placeholder="Add Asset">
-                                                </div>
-                                                <div>
-                                                    <button type="submit"
-                                                        class="mt-1 ml-2 text-white focus:ring-4  font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center shadow-lg focus:outline-none focus:shadow-outline transform transition hover:scale-105 duration-300 ease-in-out"
-                                                        style="background: linear-gradient(to right, #ee7724, #d8363a, #dd3675);">Add</button>
-                                                </div>
-                                            </div>
-                                            <label for="Add asset types" class="sr-only">Add</label>
-                                            <div class="relative mt-2">
+                                        <div class="shadow-md rounded-br-3xl px-8 ">
+                                            <div class="relative mb-2">
                                                 <div class="select-wrapper">
                                                     <select
                                                         class="appearance-none bg-white border border-gray-300 text-gray-900 py-2 px-3 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:border-gray-600 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 w-48"
@@ -72,12 +57,27 @@
                                                     </select>
                                                 </div>
                                             </div>
+                                            <div class="flex">
+                                                <label for="Add asset types" class="sr-only">Add</label>
+                                                <div class="relative mt-1">
+                                                    <input type="text" id="table-search"
+                                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-80 pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 mb-2"
+                                                        id="assetName" [(ngModel)]="assetData.assetName"
+                                                        name="assetName" required minlength="4"
+                                                        placeholder="Asset Name ( least 4 characters )">
+                                                </div>
+                                                <div>
+                                                    <button type="submit"
+                                                        class="mt-1 ml-2 text-white focus:ring-4  font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center shadow-lg focus:outline-none focus:shadow-outline transform transition hover:scale-105 duration-300 ease-in-out"
+                                                        style="background: linear-gradient(to right, #ee7724, #d8363a, #dd3675);">Add</button>
+                                                </div>
+                                            </div>
+                                            <label for="Add asset types" class="sr-only">Add</label>
                                         </div>
-
                                         <div>
                                             <div class="flex">
                                                 <label for="table-search" class="sr-only">Search</label>
-                                                <div class="relative mt-1">
+                                                <div class="relative mt-16">
                                                     <div
                                                         class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                                                         <svg class="w-5 h-5 text-gray-500 dark:text-gray-400"
@@ -140,24 +140,28 @@
                                             <ng-container
                                                 *ngIf="selectedAsset && selectedAsset.assetId === asset.assetId; else displayStatus">
                                                 <select [(ngModel)]="selectedAsset.assetStatus" name="assetStatus"
-                                                    required>
+                                                    (change)="onAssetStatusChange()" required>
                                                     <option value="AVAILABLE">AVAILABLE</option>
-                                                    <option value="IN_USE">IN_USE</option>
-                                                    <option value="UNDER_REPAIR">UNDER_REPAIR</option>
+                                                    <option value="IN_USE">IN USE</option>
+                                                    <option value="UNDER_REPAIR">UNDER REPAIR</option>
                                                 </select>
                                             </ng-container>
                                             <ng-template #displayStatus>
-                                                {{ asset.assetStatus }}
+                                                {{ getStatusDisplayName(asset.assetStatus) }}
                                             </ng-template>
                                         </td>
                                         <td class="px-6 py-4">
                                             <ng-container
                                                 *ngIf="selectedAsset && selectedAsset.assetId === asset.assetId; else displayUser">
-                                                <input [(ngModel)]="selectedAsset.user" name="user"
-                                                    placeholder="User ID" required>
+                                                <select [(ngModel)]="selectedAsset.user" name="user" required
+                                                    [disabled]="selectedAsset.assetStatus !== 'IN_USE'">
+                                                    <option value="">Select a user</option>
+                                                    <option *ngFor="let user of users" [ngValue]="user.id">{{
+                                                        user.firstName }}</option>
+                                                </select>
                                             </ng-container>
                                             <ng-template #displayUser>
-                                                {{ asset.user }}
+                                                {{ asset.user === null ? 'Not in use' : getUserNameById(asset.user) }}
                                             </ng-template>
                                         </td>
                                         <td class="px-6 py-4 text-right flex justify-between">
@@ -173,15 +177,13 @@
                                                     (click)="editAsset(asset)">Edit</a>
                                                 <a href="javascript:void(0);"
                                                     class="font-medium text-red-600 dark:text-red-500 hover:underline"
-                                                     (click)="openDeleteConfirmationDialog(asset)">Delete</a>
+                                                    (click)="openDeleteConfirmationDialog(asset)">Delete</a>
                                             </ng-template>
                                         </td>
                                     </tr>
                                 </tbody>
                             </table>
                         </div>
-
-
                         <p class="mt-5 text-gray-500">Present a comprehensive tableau of Assets, showcasing their
                             intricate
                             details

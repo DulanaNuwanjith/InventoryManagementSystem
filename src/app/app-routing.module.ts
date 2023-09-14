@@ -15,6 +15,8 @@ import { NavBarComponent } from './nav-bar/nav-bar.component';
 import { AuthGuard } from './_auth/auth.guard';
 import { ForbiddenComponent } from './forbidden/forbidden.component';
 import { AssetPopupComponent } from './asset-popup/asset-popup.component';
+import { UserAuthService } from './_services/user-auth.service';
+import { TermsAndConditionsComponent } from './terms-and-conditions/terms-and-conditions.component';
 
 const routes: Routes = [
   {
@@ -27,7 +29,8 @@ const routes: Routes = [
   },
   {
     path: 'login',
-    component: UserLoginComponent
+    canActivate:[AuthGuard],
+    component: UserLoginComponent,
   },
   {
     path: 'dashboard',
@@ -77,11 +80,16 @@ const routes: Routes = [
     path: 'asset-popup',
     component: AssetPopupComponent
   },
-
+  {
+    path: 'terms-and-conditions',
+    component: TermsAndConditionsComponent
+  }
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {
+  constructor(private auth: UserAuthService) { }
+}

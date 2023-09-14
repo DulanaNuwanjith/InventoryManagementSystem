@@ -11,13 +11,13 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 export class UserProfileManagementComponent implements OnInit {
 
   profileForm: FormGroup;
-  userDetails: any = {};
+  userDetails: any | null = null;
 
   constructor(private userService: UserService, private formBuilder: FormBuilder, private snackBar: MatSnackBar) {
     this.profileForm = this.formBuilder.group({
-      firstName: ['', Validators.required],
-      lastName: ['', Validators.required],
-      phoneno: [''],
+      firstName: ['', [Validators.required, Validators.pattern(/^[A-Za-z]+$/)]],
+      lastName: ['', [Validators.required, Validators.pattern(/^[A-Za-z]+$/)]],
+      phoneno: ['', [Validators.required, Validators.pattern(/^\d{9}$/)]],
     });
   }
 
@@ -30,9 +30,9 @@ export class UserProfileManagementComponent implements OnInit {
       (data: any) => {
         this.userDetails = data;
         this.profileForm.patchValue({
-          firstName: this.userDetails.firstName,
-          lastName: this.userDetails.lastName,
-          phoneno: this.userDetails.phoneno
+          firstName: this.userDetails?.firstName || '',
+          lastName: this.userDetails?.lastName || '',
+          phoneno: this.userDetails?.phoneno || ''
         });
       },
       (error) => {

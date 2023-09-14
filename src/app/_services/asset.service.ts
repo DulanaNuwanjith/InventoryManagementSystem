@@ -38,7 +38,10 @@ export class AssetService {
 
   getAssetsByAssetTypeName(typeName: string): Observable<Asset[]> {
     return this.httpclient.get<Asset[]>(`${this.backendUrl}/assetsByAssetTypeName/${typeName}`);
-}
+  }
 
+  getAssetsByUserId(userId: number): Observable<any[]> {
+    return this.httpclient.get<any[]>(`${this.backendUrl}/by-user/${userId}`);
+  }
 
 }

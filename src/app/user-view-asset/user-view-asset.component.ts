@@ -7,16 +7,16 @@ import { Asset } from '../_model/asset.model';
   templateUrl: './user-view-asset.component.html',
   styleUrls: ['./user-view-asset.component.css']
 })
-export class UserViewAssetComponent implements OnInit{
+export class UserViewAssetComponent implements OnInit {
 
   assets: Asset[] = [];
 
-    constructor(private assetService: AssetService) {}
+  constructor(private assetService: AssetService) { }
 
-    ngOnInit() {
-        this.assetService.getUserAssets().subscribe((data: any[]) => {
-            this.assets = data;
-        });
-    }
+  ngOnInit() {
+    this.assetService.getUserAssets().subscribe((data: any[]) => {
+      this.assets = data;
+    });
+  }
 
 }

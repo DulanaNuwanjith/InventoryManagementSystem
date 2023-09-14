@@ -28,10 +28,10 @@ export class UserManagementComponent implements OnInit {
   }
 
   deleteUser(userId: number) {
-      const newState = 'INACTIVE';
-      this.userService.updateUserState(userId, newState).subscribe(() => {
-        this.loadUsers();
-      });
+    const newState = 'INACTIVE';
+    this.userService.updateUserState(userId, newState).subscribe(() => {
+      this.loadUsers();
+    });
   }
 
   searchUsers() {
@@ -39,13 +39,13 @@ export class UserManagementComponent implements OnInit {
       this.loadUsers();
     } else {
       const searchTerms = this.searchText.trim().toLowerCase().split(' ');
-  
+
       this.users = this.users.filter((user) => {
         return searchTerms.some((term) => {
           if (user.id.toString().toLowerCase().includes(term)) {
             return true;
           }
-          
+
           return Object.values(user).some((value) => {
             if (typeof value === 'string') {
               return value.toLowerCase().includes(term);
@@ -56,17 +56,17 @@ export class UserManagementComponent implements OnInit {
       });
     }
   }
-  
-  
+
+
   selectSuggestion(suggestion: string) {
     this.searchText = suggestion;
     this.searchUsers();
     this.suggestions = [];
   }
-  
+
   showSuggestions(input: string) {
     this.suggestions = [];
-    
+
     for (let i = 1; i <= input.length; i++) {
       const suggestion = input.slice(0, i);
       this.suggestions.push(`Suggestion for ${suggestion}`);
@@ -74,17 +74,51 @@ export class UserManagementComponent implements OnInit {
   }
   openDeleteConfirmationDialog(userId: number) {
     const dialogRef = this.dialog.open(DeleteConfirmationDialogComponent, {
-        data: userId,
+      data: userId,
     });
 
     dialogRef.afterClosed().subscribe((result) => {
-        if (result === true) {
-            this.deleteUser(userId);
-        }
+      if (result === true) {
+        this.deleteUser(userId);
+      }
     });
+  }
+
+  getRoleDisplayName(userRoles: string): string {
+    if (userRoles.includes('ROLE_USER')) {
+      return 'User';
+    } else if (userRoles.includes('ROLE_ADMIN')) {
+      return 'Admin';
+    } else {
+      return 'Other';
+    }
+  }
+
+
 }
 
-  
-  
 
-}
+// assets: Asset[] = [];
+
+// deleteUser(userId: number) {
+//   const newState = 'INACTIVE';
+//   this.userService.updateUserState(userId, newState).subscribe(() => {
+//     this.assetService.getAssetsByUserId(userId).subscribe((assets: Asset[]) => {
+//       for (const asset of assets) {
+//         asset.assetStatus = 'AVAILABLE';
+//         this.assetService.updateAsset(asset.assetId, { assetStatus: 'AVAILABLE' }).subscribe(() => {
+//         }, (error) => {
+//           console.error('Error updating asset status:', error);
+//         });
+//       }
+//       this.loadAssets();
+//     });
+//     this.loadUsers();
+//   });
+// }
+
+// loadAssets() {
+//   this.assetService.getAllAssets().subscribe((assets: Asset[]) => {
+//     this.assets = assets;
+//   });
+// }

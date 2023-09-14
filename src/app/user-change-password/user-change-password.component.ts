@@ -35,7 +35,6 @@ export class UserChangePasswordComponent {
             verticalPosition: 'top',
             panelClass: ['success-snackbar'],
           });
-          this.successMessage = 'Password successfully updated.';
         },
         (error) => {
           this.errorMessage = error.error.message;
