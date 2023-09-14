@@ -110,4 +110,18 @@ public class AssetController {
         return assetService.getAssetsByAssetTypeName(typeName);
     }
 
+    @GetMapping("/by-user/{userId}")
+    public ResponseEntity<List<Asset>> getAssetsByUser(@PathVariable Long userId) {
+        List<Asset> userAssets = assetService.getAssetsByUserId(userId);
+
+        if (userAssets.isEmpty()) {
+            logger.warn("No assets found for user with userId: {}", userId);
+            return ResponseEntity.notFound().build();
+        }
+
+        logger.info("Retrieved assets for user with userId: {}", userId);
+        return ResponseEntity.ok(userAssets);
+    }
+
+
 }

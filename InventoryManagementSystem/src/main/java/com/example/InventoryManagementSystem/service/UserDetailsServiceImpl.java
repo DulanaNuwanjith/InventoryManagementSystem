@@ -2,8 +2,11 @@ package com.example.InventoryManagementSystem.service;
 
 import com.example.InventoryManagementSystem.dto.request.UpdateProfileRequest;
 import com.example.InventoryManagementSystem.dto.response.UpdateProfileResponse;
+import com.example.InventoryManagementSystem.model.Asset;
+import com.example.InventoryManagementSystem.model.EStatus;
 import com.example.InventoryManagementSystem.model.User;
 import com.example.InventoryManagementSystem.model.UserState;
+import com.example.InventoryManagementSystem.repository.AssetRepository;
 import com.example.InventoryManagementSystem.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,6 +19,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -23,6 +27,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     private static final Logger logger = LoggerFactory.getLogger(UserDetailsServiceImpl.class);
     @Autowired
     UserRepository userRepository;
+    @Autowired
+    AssetRepository assetRepository;
 
     @Override
     @Transactional
@@ -33,14 +39,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
         return UserDetailsImpl.build(user);
     }
-    @Transactional
-    public void updateUserState(long userId, UserState newState) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found with ID: " + userId));
 
-        user.setState(newState);
-        userRepository.save(user);
-    }
     public ResponseEntity<?> updateProfile(UpdateProfileRequest updateProfileRequest) {
         logger.info("Received request to update profile.");
 
@@ -76,6 +75,23 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             return user.getFirstName();
         } else {
             return null;
+        }
+    }
+
+    public void updateUserState(long userId, UserState newState) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found with ID: " + userId));
+
+        user.setState(newState);
+        userRepository.save(user);
+
+        if (newState == UserState.INACTIVE) {
+            List<Asset> userAssets = assetRepository.findByUser(userId);
+            for (Asset asset : userAssets) {
+                asset.setAssetStatus(EStatus.AVAILABLE);
+                asset.setUser(null);
+                assetRepository.save(asset);
+            }
         }
     }
 

@@ -142,9 +142,12 @@ public class AssetService {
             logger.info("Updated asset status to: {} for assetId: {}", request.getStatus(), assetId);
         }
 
-        if (request.getUser() != null) {
+        if (request.getUser() != null && request.getUser().describeConstable().isPresent()) {
             asset.setUser(request.getUser());
             logger.info("Updated asset user to: {} for assetId: {}", request.getUser(), assetId);
+        } else {
+            asset.setUser(null);
+            logger.info("Updated asset user to null for assetId: {}", assetId);
         }
 
         assetRepository.save(asset);
@@ -215,4 +218,9 @@ public class AssetService {
     public List<Asset> getAssetsByAssetTypeName(String typeName) {
         return assetRepository.findByAssetType(typeName);
     }
+
+    public List<Asset> getAssetsByUserId(Long user) {
+        return assetRepository.findByUser(user);
+    }
+
 }

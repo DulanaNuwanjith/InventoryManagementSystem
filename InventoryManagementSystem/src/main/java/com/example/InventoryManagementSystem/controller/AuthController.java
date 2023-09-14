@@ -65,6 +65,8 @@ public class AuthController {
     @Autowired
     private UserDetailsServiceImpl userDetailsService;
 
+    public AuthController() {
+    }
 
 
     @PostMapping("/signin")
@@ -240,19 +242,21 @@ public class AuthController {
         return ResponseEntity.ok(userResponses);
     }
 
-    @PutMapping("/updateuserstate/{userId}")
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<MessageResponse> updateUserState(@PathVariable long userId, @RequestBody UpdateUserStateRequest request) {
-        UserState newState = request.getNewState();
 
-        userDetailsService.updateUserState(userId, newState);
+@PutMapping("/updateuserstate/{userId}")
+@PreAuthorize("hasRole('ADMIN')")
+public ResponseEntity<MessageResponse> updateUserState(@PathVariable long userId, @RequestBody UpdateUserStateRequest request) {
+    UserState newState = request.getNewState();
 
-        String action = (newState == UserState.ACTIVE) ? "activated" : "deactivated";
-        logger.info("User with ID {} has been {}.", userId, action);
+    userDetailsService.updateUserState(userId, newState);
 
-        String responseMessage = String.format("User %s successfully.", action);
-        return ResponseEntity.ok(new MessageResponse(responseMessage));
-    }
+    String action = (newState == UserState.ACTIVE) ? "activated" : "deactivated";
+    logger.info("User with ID {} has been {}.", userId, action);
+
+    String responseMessage = String.format("User %s successfully.", action);
+
+    return ResponseEntity.ok(new MessageResponse(responseMessage));
+}
 
     @GetMapping("/user")
     public ResponseEntity<Optional<User>> getCurrentUserDetails() {
