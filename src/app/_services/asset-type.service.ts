@@ -1,32 +1,37 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { environment } from 'src/environments/environment.development';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AssetTypeService {
 
-  backendUrl = 'http://localhost:8087/api/asset-types'; 
-  Url = 'http://localhost:8087/api/assets';
+  baseUrl
+  Url
+  private domian: string | undefined;
 
-  constructor(private httpclient: HttpClient) { }
+  constructor(private httpclient: HttpClient) {
+    this.baseUrl = environment.domain + "asset-types";
+    this.Url = environment.domain + "assets";
+   }
 
   getAllAssetTypes(): Observable<any[]> {
-    return this.httpclient.get<any[]>(this.backendUrl + "/all");
+    return this.httpclient.get<any[]>(this.baseUrl + "/all");
   }
 
   addAssetType(assetTypeData: any) {
-    return this.httpclient.post(this.backendUrl + "/add", assetTypeData)
+    return this.httpclient.post(this.baseUrl + "/add", assetTypeData)
   }
 
   searchAssetTypes(searchText: string): Observable<any[]> {
     const apiUrl = `your-api-endpoint?search=${searchText}`;
-    return this.httpclient.get<any[]>(this.backendUrl + "/all");
+    return this.httpclient.get<any[]>(this.baseUrl + "/all");
   }
 
   deleteAssetTypeByTypeId(typeId: number): Observable<any> {
-    return this.httpclient.delete(`${this.backendUrl}/${typeId}`);
+    return this.httpclient.delete(`${this.baseUrl}/${typeId}`);
   }
 
   getAssetsByAssetTypeName(typeName: string): Observable<any[]> {

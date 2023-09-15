@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { UserAuthService } from './user-auth.service';
 import { Observable } from 'rxjs';
+import { environment } from 'src/environments/environment.development';
 
 interface LoginData {
   username: string;
@@ -12,8 +13,8 @@ interface LoginData {
   providedIn: 'root'
 })
 export class UserService {
-
-  PATH_OF_API = "http://localhost:8087/api/auth";
+  baseUrl
+  private domian: string | undefined;
   requestHeader = new HttpHeaders(
     {
       "No-Auth": "True"
@@ -23,10 +24,12 @@ export class UserService {
   constructor(
     private httpclient: HttpClient,
     private userAuthService: UserAuthService
-  ) { }
+  ) {
+    this.baseUrl = environment.domain + "auth";
+   }
 
   public login(loginData: LoginData) {
-    return this.httpclient.post(this.PATH_OF_API + "/signin", loginData, { headers: this.requestHeader })
+    return this.httpclient.post(this.baseUrl + "/signin", loginData, { headers: this.requestHeader })
   }
 
   public roleMatch(allowedRoles: string[]): boolean {
@@ -46,26 +49,26 @@ export class UserService {
   }
 
   register(userData: any) {
-    return this.httpclient.post(this.PATH_OF_API + "/signup", userData)
+    return this.httpclient.post(this.baseUrl + "/signup", userData)
   }
 
   getUsers(): Observable<any[]> {
-    return this.httpclient.get<any[]>(this.PATH_OF_API + "/users");
+    return this.httpclient.get<any[]>(this.baseUrl + "/users");
   }
 
   updateUserState(userId: number, newState: string): Observable<any> {
     return this.httpclient.put<any>(
-      `${this.PATH_OF_API}/updateuserstate/${userId}`,
+      `${this.baseUrl}/updateuserstate/${userId}`,
       { newState }
     );
   }
 
   getCurrentUserDetails(): Observable<any> {
-    return this.httpclient.get<any>(`${this.PATH_OF_API}/user`);
+    return this.httpclient.get<any>(`${this.baseUrl}/user`);
   }
 
   updateUserProfile(updatedProfile: any): Observable<any> {
-    return this.httpclient.put(`${this.PATH_OF_API}/updateprofile`, updatedProfile);
+    return this.httpclient.put(`${this.baseUrl}/updateprofile`, updatedProfile);
   }
   
 }

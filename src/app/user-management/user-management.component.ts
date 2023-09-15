@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { UserService } from '../_services/user.service';
 import { DeleteConfirmationDialogComponent } from '../delete-confirmation-dialog/delete-confirmation-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
+import { User } from '../_model/user.model';
 
 @Component({
   selector: 'app-user-management',
@@ -12,12 +13,16 @@ export class UserManagementComponent implements OnInit {
   users: any[] = [];
   searchText: string = '';
   suggestions: string[] = [];
+  currentPage: number = 1;
+  pageSize: number = 7;
+  totalItems: number = 0;
 
   constructor(private userService: UserService, private dialog: MatDialog) { }
 
   ngOnInit(): void {
     this.userService.getUsers().subscribe((data) => {
       this.users = data;
+      this.totalItems = this.users.length;
     });
   }
 
@@ -94,31 +99,20 @@ export class UserManagementComponent implements OnInit {
     }
   }
 
+  getPaginatedUsers(): any[] {
+    const startIndex = (this.currentPage - 1) * this.pageSize;
+    const endIndex = startIndex + this.pageSize;
+    return this.users.slice(startIndex, endIndex);
+  }
+
+  changePage(page: number): void {
+    this.currentPage = page;
+  }
+
+  getPageNumbers(): number[] {
+    const totalPages = Math.ceil(this.totalItems / this.pageSize);
+    return Array.from({ length: totalPages }, (_, i) => i + 1);
+  }
 
 }
 
-
-// assets: Asset[] = [];
-
-// deleteUser(userId: number) {
-//   const newState = 'INACTIVE';
-//   this.userService.updateUserState(userId, newState).subscribe(() => {
-//     this.assetService.getAssetsByUserId(userId).subscribe((assets: Asset[]) => {
-//       for (const asset of assets) {
-//         asset.assetStatus = 'AVAILABLE';
-//         this.assetService.updateAsset(asset.assetId, { assetStatus: 'AVAILABLE' }).subscribe(() => {
-//         }, (error) => {
-//           console.error('Error updating asset status:', error);
-//         });
-//       }
-//       this.loadAssets();
-//     });
-//     this.loadUsers();
-//   });
-// }
-
-// loadAssets() {
-//   this.assetService.getAllAssets().subscribe((assets: Asset[]) => {
-//     this.assets = assets;
-//   });
-// }

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { UserService } from '../_services/user.service';
 import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-user-registration',
@@ -21,14 +22,14 @@ export class UserRegistrationComponent implements OnInit {
     password: '',
   };
 
-  constructor(private userService: UserService, private snackBar: MatSnackBar, private fb: FormBuilder) { 
+  constructor(private userService: UserService, private snackBar: MatSnackBar, private fb: FormBuilder, private router: Router) { 
     this.registrationForm = this.fb.group({
       firstName: ['', [Validators.required, Validators.maxLength(10), this.noNumbersValidator]],
       lastName: ['', [Validators.required, this.noNumbersValidator]],
       phoneno: ['', [Validators.required, this.onlyNumbersValidator]],
       username: ['', [Validators.required, Validators.maxLength(10)]],
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.maxLength(50)]],
+      password: ['', [Validators.required, Validators.maxLength(50), Validators.minLength(6)]],
     });
   }
 
@@ -67,6 +68,7 @@ export class UserRegistrationComponent implements OnInit {
           horizontalPosition: 'center',
           verticalPosition: 'top',
         });
+        this.router.navigate(['/login']);
       },
       (error) => {
         console.error('Registration failed:', error);

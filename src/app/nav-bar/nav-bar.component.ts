@@ -3,6 +3,7 @@ import { UserAuthService } from '../_services/user-auth.service';
 import { Router } from '@angular/router';
 import { UserService } from '../_services/user.service';
 import { Subscription } from 'rxjs';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-nav-bar',
@@ -18,7 +19,8 @@ export class NavBarComponent implements OnInit, OnDestroy{
     private userAuthService: UserAuthService,
     private router: Router,
     public userService: UserService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private snackBar: MatSnackBar
  
   ) { 
     this.isAuthenticated = false;
@@ -55,6 +57,12 @@ export class NavBarComponent implements OnInit, OnDestroy{
     this.cdr.detectChanges();
 
     this.router.navigate(['/home']);
+    this.snackBar.open('Successfully logged out', 'Close', {
+      duration: 3000,
+      horizontalPosition: 'center',
+      verticalPosition: 'top',
+      panelClass: ['success-snackbar'],
+    });
   }
 
 

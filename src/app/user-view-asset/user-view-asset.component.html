@@ -38,7 +38,6 @@
                         My Asset
                     </h2>
                     <div class="mt-10">
-
                         <div class="relative overflow-x-auto shadow-md sm:rounded-lg mb-5">
                             <table class="w-full text-sm text-center text-gray-500 dark:text-gray-400">
                                 <thead
@@ -55,7 +54,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr *ngFor="let asset of assets"
+                                    <tr *ngFor="let asset of getPaginatedAssets()"
                                         class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                                         <td class="w-4 p-4">
                                         </td>
@@ -77,6 +76,19 @@
                                 </tbody>
                             </table>
                         </div>
+                        <div class="mt-4 flex justify-center">
+                            <button *ngIf="currentPage > 1" class="mx-2 text-blue-600 hover:text-blue-800"
+                                (click)="changePage(currentPage - 1)">Previous</button>
+                            <ng-container *ngFor="let page of getPageNumbers()">
+                                <button class="mx-2 text-blue-600 hover:text-blue-800"
+                                    [class.font-semibold]="currentPage === page" (click)="changePage(page)">
+                                    {{ page }}
+                                </button>
+                            </ng-container>
+                            <button *ngIf="currentPage < getPageNumbers().length"
+                                class="mx-2 text-blue-600 hover:text-blue-800"
+                                (click)="changePage(currentPage + 1)">Next</button>
+                        </div>
                         <p class="mt-5 text-gray-500">Present a comprehensive tableau of My Assets, showcasing their
                             intricate details
                             within an organized framework for easy perusal.
@@ -90,13 +102,10 @@
                         </div>
                         <script src="https://unpkg.com/flowbite@1.3.4/dist/flowbite.js"></script>
                     </div>
-
                 </div>
             </section>
-
         </div>
     </div>
-
     <div style="background: linear-gradient(to right, #ee7724, #d8363a, #dd3675, #b44593)">
         <section class="container mx-auto text-center py-6 justify-center">
             <h2 class="w-full my-2 text-5xl font-bold leading-tight text-center text-white">
