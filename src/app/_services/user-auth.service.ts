@@ -1,13 +1,15 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
+import { environment } from 'src/environments/environment.development';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserAuthService {
+  baseUrl
+  private domian: string | undefined;
   
-  PATH_OF_API = "http://localhost:8087/api/auth";
   requestHeader = new HttpHeaders(
     {
       "No-Auth": "True"
@@ -16,6 +18,7 @@ export class UserAuthService {
 
   isAuthenticated = new Subject<boolean>();
   constructor(private httpclient: HttpClient,) {
+    this.baseUrl = environment.domain + "auth";
   }
 
   public setRoles(roles:[]){
@@ -66,7 +69,7 @@ export class UserAuthService {
       newPassword: newPassword
     };
 
-    return this.httpclient.put(`${this.PATH_OF_API}/updatepassword`, body, { headers: headers });
+    return this.httpclient.put(`${this.baseUrl}/updatepassword`, body, { headers: headers });
   }
   
 }

@@ -1,8 +1,6 @@
 <body class="leading-normal tracking-normal text-white gradient" style="font-family: 'Source Sans Pro', sans-serif;">
-    <!--Hero-->
     <div class="pt-24">
         <div class="container px-3 mx-auto flex flex-wrap flex-col md:flex-row items-center">
-            <!--Left Col-->
             <div class="flex flex-col w-full md:w-2/5 justify-center items-start text-center md:text-left">
                 <h1 class="h-12">
                 </h1>
@@ -33,16 +31,13 @@
         </svg>
     </div>
     <div class="bg-white">
-
         <div class=" mr-24 ml-24 ">
-
             <section class="bg-white border-b py-8">
                 <div style="font-family: 'Source Sans Pro', sans-serif;">
                     <a class="w-full my-2 text-4xl font-semibold leading-tight text-gray-600">
                         User Management
                     </a>
                     <div class="mt-6">
-
                         <div class="relative overflow-x-auto shadow-md sm:rounded-lg mb-5">
                             <div class="p-4">
                                 <div class="flex">
@@ -72,7 +67,6 @@
                                         </div>
                                     </div>
                                 </div>
-
                             </div>
                             <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                                 <thead
@@ -99,7 +93,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <ng-container *ngFor="let user of users">
+                                    <ng-container *ngFor="let user of getPaginatedUsers()">
                                         <tr *ngIf="getRoleDisplayName(user.roles) === 'User'"
                                             class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                                             <th scope="row"
@@ -129,6 +123,19 @@
                                 </tbody>
                             </table>
                         </div>
+                        <div class="mt-4 flex justify-center">
+                            <button *ngIf="currentPage > 1" class="mx-2 text-blue-500 hover:text-blue-800"
+                                (click)="changePage(currentPage - 1)">Previous</button>
+                            <ng-container *ngFor="let page of getPageNumbers()">
+                                <button class="mx-2 text-blue-500 hover:text-blue-800"
+                                    [class.font-semibold]="currentPage === page" (click)="changePage(page)">
+                                    {{ page }}
+                                </button>
+                            </ng-container>
+                            <button *ngIf="currentPage < getPageNumbers().length"
+                                class="mx-2 text-blue-500 hover:text-blue-800"
+                                (click)="changePage(currentPage + 1)">Next</button>
+                        </div>
                         <p class="mt-5 text-gray-500">Present a comprehensive tableau of users, showcasing their
                             intricate details
                             within an organized framework for easy perusal.
@@ -141,7 +148,6 @@
                             </a>
                         </div>
                     </div>
-
                 </div>
             </section>
         </div>

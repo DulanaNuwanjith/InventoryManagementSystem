@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { AssetService } from '../_services/asset.service';
 import { Asset } from '../_model/asset.model';
-import { FormControl, FormGroup, NgForm, Validators } from '@angular/forms';
+import { NgForm } from '@angular/forms';
 import { AssetTypeService } from '../_services/asset-type.service';
 import { UserService } from '../_services/user.service';
 import { DeleteConfirmationDialogComponent } from '../delete-confirmation-dialog/delete-confirmation-dialog.component';
@@ -25,6 +25,9 @@ export class AssetManagementComponent implements OnInit {
   assetTypes: any[] = [];
   users: any[] = [];
   shouldShowAddAsset: boolean = false;
+  currentPage: number = 1;
+  pageSize: number = 5;
+  totalItems: number = 0;
 
   assetData = {
     assetName: '',
@@ -255,4 +258,20 @@ export class AssetManagementComponent implements OnInit {
     const user = this.users.find(u => u.id === id);
     if (user) return user?.firstName;
   }
+
+  getPaginatedAssets(): Asset[] {
+    const startIndex = (this.currentPage - 1) * this.pageSize;
+    const endIndex = startIndex + this.pageSize;
+    return this.filteredAssets.slice(startIndex, endIndex);
+  }
+
+  changePage(page: number): void {
+    this.currentPage = page;
+  }
+
+  getPageNumbers(): number[] {
+    const totalPages = Math.ceil(this.filteredAssets.length / this.pageSize);
+    return Array.from({ length: totalPages }, (_, i) => i + 1);
+  }
+
 }

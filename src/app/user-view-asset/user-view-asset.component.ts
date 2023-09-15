@@ -10,6 +10,8 @@ import { Asset } from '../_model/asset.model';
 export class UserViewAssetComponent implements OnInit {
 
   assets: Asset[] = [];
+  currentPage: number = 1;
+  pageSize: number = 7;
 
   constructor(private assetService: AssetService) { }
 
@@ -18,5 +20,21 @@ export class UserViewAssetComponent implements OnInit {
       this.assets = data;
     });
   }
+
+  getPaginatedAssets(): Asset[] {
+    const startIndex = (this.currentPage - 1) * this.pageSize;
+    const endIndex = startIndex + this.pageSize;
+    return this.assets.slice(startIndex, endIndex);
+  }
+
+  changePage(page: number): void {
+    this.currentPage = page;
+  }
+
+  getPageNumbers(): number[] {
+    const totalPages = Math.ceil(this.assets.length / this.pageSize);
+    return Array.from({ length: totalPages }, (_, i) => i + 1);
+  }
+
 
 }
