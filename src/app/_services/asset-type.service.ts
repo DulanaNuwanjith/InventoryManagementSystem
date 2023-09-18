@@ -26,7 +26,6 @@ export class AssetTypeService {
   }
 
   searchAssetTypes(searchText: string): Observable<any[]> {
-    const apiUrl = `your-api-endpoint?search=${searchText}`;
     return this.httpclient.get<any[]>(this.baseUrl + "/all");
   }
 

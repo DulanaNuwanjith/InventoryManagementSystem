@@ -136,7 +136,7 @@ export class AssetManagementComponent implements OnInit {
   }
 
   updateAsset(updatedAsset: Asset) {
-    if (updatedAsset.assetStatus === 'IN_USE' && updatedAsset.user === null) {
+    if (updatedAsset.assetStatus === 'IN_USE' && !updatedAsset.user) {
       this.snackBar.open('Please select a user when the status is IN USE.', 'Close', {
         duration: 3000,
         horizontalPosition: 'center',
@@ -144,7 +144,6 @@ export class AssetManagementComponent implements OnInit {
         panelClass: ['error-snackbar'],
       });
     } else {
-
       const isUserSelected = updatedAsset.user !== null;
 
       if (!isUserSelected) {
@@ -237,11 +236,11 @@ export class AssetManagementComponent implements OnInit {
   getStatusDisplayName(assetStatus: string): string {
     switch (assetStatus) {
       case 'IN_USE':
-        return 'IN USE';
+        return 'In Use';
       case 'AVAILABLE':
-        return 'AVAILABLE';
+        return 'Available';
       case 'UNDER_REPAIR':
-        return 'UNDER REPAIR';
+        return 'Under Repair';
       default:
         return 'Other';
     }
