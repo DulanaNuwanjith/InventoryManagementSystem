@@ -22,13 +22,18 @@ export class UserChangePasswordComponent {
       this.errorMessage = 'New and confirm passwords do not match.';
       return;
     }
-
+  
+    if (this.newPassword.length < 6) {
+      this.errorMessage = 'New password must have at least 6 characters.';
+      return;
+    }
+  
     this.authService.changePassword(this.oldPassword, this.newPassword)
       .subscribe(
         (response) => {
           this.errorMessage = '';
           this.clearForm();
-
+  
           this.snackBar.open('Successfully updated password', 'Close', {
             duration: 3000,
             horizontalPosition: 'center',
@@ -37,10 +42,19 @@ export class UserChangePasswordComponent {
           });
         },
         (error) => {
-          this.errorMessage = error.error.message;
+          console.log(error);
+          if (error && error.status === 401) {
+            this.errorMessage = 'Wrong existing password.';
+          } else if (error && error.error && error.error.message) {
+            this.errorMessage = error.error.message;
+          } else {
+            this.errorMessage = 'Wrong existing password.';
+          }
         }
       );
   }
+  
+  
 
   clearForm() {
     this.oldPassword = '';

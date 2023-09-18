@@ -17,6 +17,7 @@ import { ForbiddenComponent } from './forbidden/forbidden.component';
 import { AssetPopupComponent } from './asset-popup/asset-popup.component';
 import { UserAuthService } from './_services/user-auth.service';
 import { TermsAndConditionsComponent } from './terms-and-conditions/terms-and-conditions.component';
+import { AvailableAssetsListComponent } from './available-assets-list/available-assets-list.component';
 
 const routes: Routes = [
   {
@@ -83,6 +84,10 @@ const routes: Routes = [
   {
     path: 'terms-and-conditions',
     component: TermsAndConditionsComponent
+  },
+  {
+    path: 'available-assets-list',
+    component: AvailableAssetsListComponent
   }
 ];
 

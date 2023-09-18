@@ -29,6 +29,9 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { DeleteConfirmationDialogComponent } from './delete-confirmation-dialog/delete-confirmation-dialog.component';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { TermsAndConditionsComponent } from './terms-and-conditions/terms-and-conditions.component';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { AvailableAssetsListComponent } from './available-assets-list/available-assets-list.component';
 
 @NgModule({
   declarations: [
@@ -49,6 +52,7 @@ import { TermsAndConditionsComponent } from './terms-and-conditions/terms-and-co
     AssetPopupComponent,
     DeleteConfirmationDialogComponent,
     TermsAndConditionsComponent,
+    AvailableAssetsListComponent,
 
   ],
   imports: [
@@ -62,6 +66,8 @@ import { TermsAndConditionsComponent } from './terms-and-conditions/terms-and-co
     ReactiveFormsModule,
     MatDialogModule,
     MatSnackBarModule,
+    MatFormFieldModule,
+    MatInputModule
   ],
   providers: [
     AuthGuard,

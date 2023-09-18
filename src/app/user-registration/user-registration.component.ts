@@ -26,7 +26,7 @@ export class UserRegistrationComponent implements OnInit {
     this.registrationForm = this.fb.group({
       firstName: ['', [Validators.required, Validators.maxLength(10), this.noNumbersValidator]],
       lastName: ['', [Validators.required, this.noNumbersValidator]],
-      phoneno: ['', [Validators.required, this.onlyNumbersValidator]],
+      phoneno: ['', [Validators.required, this.onlyNumbersValidator , Validators.pattern(/^\d{9}$/)]],
       username: ['', [Validators.required, Validators.maxLength(10)]],
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.maxLength(50), Validators.minLength(6)]],
