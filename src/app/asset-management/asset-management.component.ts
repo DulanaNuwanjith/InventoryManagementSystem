@@ -68,9 +68,33 @@ export class AssetManagementComponent implements OnInit {
   }
 
   addAsset(addAssetForm: NgForm) {
+    const assetName = this.assetData?.assetName?.trim();
+    const assetTypeName = this.assetData?.typeName;
+
+    if (!assetName || assetName.length < 4) {
+      const errorMessage = assetName ? 'Asset name must be at least 4 characters' : 'Asset name cannot be empty';
+      this.snackBar.open(errorMessage, 'Close', {
+        duration: 3000,
+        horizontalPosition: 'center',
+        verticalPosition: 'top',
+        panelClass: 'error-snackbar',
+      });
+      return;
+    }
+
+    if (!assetTypeName) {
+      this.snackBar.open('Please select an asset type', 'Close', {
+        duration: 3000,
+        horizontalPosition: 'center',
+        verticalPosition: 'top',
+        panelClass: 'error-snackbar',
+      });
+      return;
+    }
+
     this.assetService.addAsset(this.assetData).subscribe(
       (response) => {
-        console.log('Asset type Add successful:', response);
+        console.log('Asset Add successful:', response);
         this.loadAsset();
         addAssetForm.resetForm();
 
@@ -78,11 +102,17 @@ export class AssetManagementComponent implements OnInit {
           duration: 3000,
           horizontalPosition: 'center',
           verticalPosition: 'top',
-          panelClass: ['success-snackbar'],
+          panelClass: 'success-snackbar',
         });
       },
       (error) => {
-        console.error('Asset type Add failed:', error);
+        console.error('Asset Add failed:', error);
+        this.snackBar.open('Failed to add asset', 'Close', {
+          duration: 3000,
+          horizontalPosition: 'center',
+          verticalPosition: 'top',
+          panelClass: 'error-snackbar',
+        });
       }
     );
   }

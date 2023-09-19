@@ -7,13 +7,13 @@ import { UserAuthService } from '../_services/user-auth.service';
   styleUrls: ['./home-page.component.css']
 })
 export class HomePageComponent implements OnInit {
-  
-  isAuthenticated: boolean = false; 
+
+  isAuthenticated: boolean = false;
 
   constructor(private userAuthService: UserAuthService) { }
 
   ngOnInit(): void {
     this.isAuthenticated = this.userAuthService.isLoggedIn();
   }
-  
+
 }

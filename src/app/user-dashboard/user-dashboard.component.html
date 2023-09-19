@@ -42,8 +42,7 @@
         </div>
         <div class="w-full md:w-1/3 p-6 flex flex-col flex-grow flex-shrink">
           <div class="flex-1 bg-white rounded-t rounded-b-none overflow-hidden shadow">
-            <a href="http://localhost:4200/user-profile-management"
-              class="flex flex-wrap no-underline hover:no-underline">
+            <a routerLink="/user-profile-management" class="flex flex-wrap no-underline hover:no-underline">
               <div class="w-full font-bold text-xl text-gray-800 px-6 mt-6">
                 Profile
               </div>
@@ -55,7 +54,7 @@
           </div>
           <div class="flex-none mt-auto bg-white rounded-b rounded-t-none overflow-hidden shadow p-6">
             <div class="flex items-center justify-center">
-              <a href="http://localhost:4200/user-profile-management">
+              <a routerLink="/user-profile-management">
                 <button
                   class="w-36 lg:mx-0 gradient text-white font-bold rounded-full my-6 py-4 px-8 shadow-lg focus:outline-none focus:shadow-outline transform transition hover:scale-105 duration-300 ease-in-out "
                   style="background: linear-gradient(to right, #ee7724, #d8363a, #dd3675, #b44593);">
@@ -67,7 +66,7 @@
         </div>
         <div class="w-full md:w-1/3 p-6 flex flex-col flex-grow flex-shrink">
           <div class="flex-1 bg-white rounded-t rounded-b-none overflow-hidden shadow">
-            <a href="http://localhost:4200/user-view-asset" class="flex flex-wrap no-underline hover:no-underline">
+            <a routerLink="/user-view-asset" class="flex flex-wrap no-underline hover:no-underline">
               <div class="w-full font-bold text-xl text-gray-800 px-6 mt-6">
                 My Assets
               </div>
@@ -80,7 +79,7 @@
           </div>
           <div class="flex-none mt-auto bg-white rounded-b rounded-t-none overflow-hidden shadow p-6">
             <div class="flex items-center justify-center">
-              <a href="http://localhost:4200/user-view-asset">
+              <a routerLink="/user-view-asset">
                 <button
                   class="w-36 lg:mx-0  gradient text-white font-bold rounded-full my-6 py-4 px-8 shadow-lg focus:outline-none focus:shadow-outline transform transition hover:scale-105 duration-300 ease-in-out"
                   style="background: linear-gradient(to right, #ee7724, #d8363a, #dd3675, #b44593);">
@@ -92,18 +91,19 @@
         </div>
         <div class="w-full md:w-1/3 p-6 flex flex-col flex-grow flex-shrink">
           <div class="flex-1 bg-white rounded-t rounded-b-none overflow-hidden shadow">
-            <a href="http://localhost:4200/available-assets-list" class="flex flex-wrap no-underline hover:no-underline">
+            <a routerLink="/available-assets-list" class="flex flex-wrap no-underline hover:no-underline">
               <div class="w-full font-bold text-xl text-gray-800 px-6 mt-6">
                 Available Assets
               </div>
               <p class="text-gray-800 text-base px-6 mb-5 mt-2">
-                Available Assets are here.
+                Available Assets are here. <br> Users can expect to find information related to available assets in this
+                section.
               </p>
             </a>
           </div>
           <div class="flex-none mt-auto bg-white rounded-b rounded-t-none overflow-hidden shadow p-6">
             <div class="flex items-center justify-center">
-              <a href="http://localhost:4200/available-assets-list">
+              <a routerLink="/available-assets-list">
                 <button
                   class="w-36 lg:mx-0  gradient text-white font-bold rounded-full my-6 py-4 px-8 shadow-lg focus:outline-none focus:shadow-outline transform transition hover:scale-105 duration-300 ease-in-out"
                   style="background: linear-gradient(to right, #ee7724, #d8363a, #dd3675, #b44593);">

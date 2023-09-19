@@ -1,3 +1,3 @@
 export const environment = {
-    domain: "http://localhost:8087/api/",
+    backendbaseUrl: "http://localhost:8087/api",
 };

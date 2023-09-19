@@ -62,7 +62,6 @@ export class UserManagementComponent implements OnInit {
     }
   }
 
-
   selectSuggestion(suggestion: string) {
     this.searchText = suggestion;
     this.searchUsers();
@@ -77,6 +76,7 @@ export class UserManagementComponent implements OnInit {
       this.suggestions.push(`Suggestion for ${suggestion}`);
     }
   }
+
   openDeleteConfirmationDialog(userId: number) {
     const dialogRef = this.dialog.open(DeleteConfirmationDialogComponent, {
       data: userId,

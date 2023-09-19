@@ -18,10 +18,10 @@ export class UserLoginComponent implements OnInit {
     private userService: UserService,
     private userAuthService: UserAuthService,
     private router: Router,
-    private snackBar: MatSnackBar 
-  ) {}
+    private snackBar: MatSnackBar
+  ) { }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   login(loginForm: NgForm) {
     this.userService.login(loginForm.value).subscribe(
@@ -53,4 +53,5 @@ export class UserLoginComponent implements OnInit {
       }
     );
   }
+
 }

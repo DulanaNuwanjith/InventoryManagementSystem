@@ -36,5 +36,4 @@ export class UserViewAssetComponent implements OnInit {
     return Array.from({ length: totalPages }, (_, i) => i + 1);
   }
 
-
 }

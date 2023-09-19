@@ -13,8 +13,8 @@ export class DeleteConfirmationDialogComponent {
 
     constructor(
         public dialogRef: MatDialogRef<DeleteConfirmationDialogComponent>,
-        @Inject(MAT_DIALOG_DATA) public data: any , private snackBar: MatSnackBar
-    ) {}
+        @Inject(MAT_DIALOG_DATA) public data: any, private snackBar: MatSnackBar
+    ) { }
 
     onNoClick(): void {
         this.dialogRef.close(false);
@@ -32,5 +32,14 @@ export class DeleteConfirmationDialogComponent {
             this.showError = true;
         }
     }
-    
+
+    // onYesClick(): void {
+    //     this.snackBar.open('Successfully deleted', 'Close', {
+    //         duration: 3000,
+    //         horizontalPosition: 'center',
+    //         verticalPosition: 'top',
+    //     });
+    //     this.dialogRef.close(true);
+    // }
+
 }

@@ -44,12 +44,12 @@ export class UserProfileManagementComponent implements OnInit {
   updateProfile() {
     if (this.profileForm.valid) {
       const updatedData = this.profileForm.value;
-  
+
       this.userService.updateUserProfile(updatedData).subscribe(
         (response: any) => {
           console.log('Profile updated successfully.');
           this.loadUserDetails();
-          
+
           this.snackBar.open('Profile updated successfully', 'Close', {
             duration: 3000,
             horizontalPosition: 'center',
@@ -61,8 +61,8 @@ export class UserProfileManagementComponent implements OnInit {
           console.error('Error updating user profile:', error);
         }
       );
-    } else {}
+    } else { }
   }
-  
-  
+
+
 }

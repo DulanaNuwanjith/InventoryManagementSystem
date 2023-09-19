@@ -14,7 +14,6 @@ interface LoginData {
 })
 export class UserService {
   baseUrl
-  private domian: string | undefined;
   requestHeader = new HttpHeaders(
     {
       "No-Auth": "True"
@@ -25,8 +24,8 @@ export class UserService {
     private httpclient: HttpClient,
     private userAuthService: UserAuthService
   ) {
-    this.baseUrl = environment.domain + "auth";
-   }
+    this.baseUrl = environment.backendbaseUrl + "/auth";
+  }
 
   public login(loginData: LoginData) {
     return this.httpclient.post(this.baseUrl + "/signin", loginData, { headers: this.requestHeader })
@@ -70,5 +69,5 @@ export class UserService {
   updateUserProfile(updatedProfile: any): Observable<any> {
     return this.httpclient.put(`${this.baseUrl}/updateprofile`, updatedProfile);
   }
-  
+
 }

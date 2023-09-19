@@ -10,7 +10,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   templateUrl: './nav-bar.component.html',
   styleUrls: ['./nav-bar.component.css']
 })
-export class NavBarComponent implements OnInit, OnDestroy{
+export class NavBarComponent implements OnInit, OnDestroy {
   userData: any;
   isAuthenticated: boolean;
   auth$: Subscription = new Subscription;
@@ -21,8 +21,8 @@ export class NavBarComponent implements OnInit, OnDestroy{
     public userService: UserService,
     private cdr: ChangeDetectorRef,
     private snackBar: MatSnackBar
- 
-  ) { 
+
+  ) {
     this.isAuthenticated = false;
   }
 
@@ -53,7 +53,7 @@ export class NavBarComponent implements OnInit, OnDestroy{
     this.userAuthService.clear();
     this.isAuthenticated = this.userAuthService.isLoggedIn();
     console.log("isLoggedIN", this.userAuthService.isLoggedIn());
-    
+
     this.cdr.detectChanges();
 
     this.router.navigate(['/home']);
