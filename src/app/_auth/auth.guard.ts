@@ -8,7 +8,6 @@ import { UserService } from '../_services/user.service';
   providedIn: 'root'
 })
 
-
 export class AuthGuard implements CanActivate {
 
   constructor(private userAuthService: UserAuthService,
@@ -32,13 +31,20 @@ export class AuthGuard implements CanActivate {
       }
 
       if (state.url === '/login') {
-        this.router.navigate(['/dashboard']);
+        this.router.navigate(['/home']);
       }
 
+      if (state.url === '/registration') {
+        this.router.navigate(['/home']);
+        return false;
+      }
+
+      return true;
+
     } else {
-      if (state.url === '/login') return true;
+      if (state.url === '/login' || state.url === '/registration') return true;
     }
-    
+
     this.router.navigate(['/home']);
     return false;
   }

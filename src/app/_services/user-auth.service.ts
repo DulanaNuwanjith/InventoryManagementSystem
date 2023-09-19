@@ -8,8 +8,7 @@ import { environment } from 'src/environments/environment.development';
 })
 export class UserAuthService {
   baseUrl
-  private domian: string | undefined;
-  
+
   requestHeader = new HttpHeaders(
     {
       "No-Auth": "True"
@@ -18,10 +17,10 @@ export class UserAuthService {
 
   isAuthenticated = new Subject<boolean>();
   constructor(private httpclient: HttpClient,) {
-    this.baseUrl = environment.domain + "auth";
+    this.baseUrl = environment.backendbaseUrl + "/auth";
   }
 
-  public setRoles(roles:[]){
+  public setRoles(roles: []) {
     localStorage.setItem('roles', JSON.stringify(roles));
   }
 
@@ -30,25 +29,25 @@ export class UserAuthService {
     return rolesJson ? JSON.parse(rolesJson) : [];
   }
 
-  public setToken(jwtToken:string){
-    localStorage.setItem("jwtToken",jwtToken)
+  public setToken(jwtToken: string) {
+    localStorage.setItem("jwtToken", jwtToken)
   }
 
   public getToken(): string {
     return localStorage.getItem('jwtToken') as string || '';
   }
 
-  public clear(){
+  public clear() {
     localStorage.clear();
   }
 
   public isLoggedIn(): boolean {
     return !!this.getRoles() && !!this.getToken();
-  }  
+  }
 
   logout() {
     this.isAuthenticated.next(false);
-    localStorage.clear(); 
+    localStorage.clear();
   }
 
   public login() {
@@ -71,5 +70,5 @@ export class UserAuthService {
 
     return this.httpclient.put(`${this.baseUrl}/updatepassword`, body, { headers: headers });
   }
-  
+
 }

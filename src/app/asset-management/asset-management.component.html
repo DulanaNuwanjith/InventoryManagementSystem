@@ -109,7 +109,7 @@
                                         <th scope="col" class="px-6 py-3">
                                             Asset Type
                                         </th>
-                                        <th scope="col" class="p-4">
+                                        <th scope="col" class="">
                                         </th>
                                         <th scope="col" class="px-6 py-3">
                                             Status
@@ -142,7 +142,7 @@
                                               'bg-gray-500': asset.assetStatus === 'OTHER'
                                             }"></span>
                                         </td>
-                                        <td class="px-6 py-4">
+                                        <td class="px-2 py-4">
                                             <ng-container
                                                 *ngIf="selectedAsset && selectedAsset.assetId === asset.assetId; else displayStatus">
                                                 <select [(ngModel)]="selectedAsset.assetStatus" name="assetStatus"
@@ -155,7 +155,7 @@
                                             <ng-template #displayStatus>
                                                 {{ getStatusDisplayName(asset.assetStatus) }}
                                             </ng-template>
-                                            
+
                                         </td>
                                         <td class="px-6 py-4">
                                             <ng-container
@@ -180,11 +180,12 @@
                                                     (click)="cancelEdit()">Cancel</button>
                                             </ng-container>
                                             <ng-template #editButton>
-                                                <a class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
-                                                    (click)="editAsset(asset)">Edit</a>
-                                                <a href="javascript:void(0);"
+                                                <button
+                                                    class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+                                                    (click)="editAsset(asset)">Edit</button>
+                                                <button
                                                     class="font-medium text-red-600 dark:text-red-500 hover:underline"
-                                                    (click)="openDeleteConfirmationDialog(asset)">Delete</a>
+                                                    (click)="openDeleteConfirmationDialog(asset)">Delete</button>
                                             </ng-template>
                                         </td>
                                     </tr>
@@ -211,7 +212,7 @@
                             within an organized framework for easy perusal.
                         </p>
                         <div class="mt-6">
-                            <a href="http://localhost:4200/dashboard">
+                            <a routerLink="/dashboard">
                                 <button type="submit"
                                     class="mt-1 ml-2 text-white focus:ring-4  font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center shadow-lg focus:outline-none focus:shadow-outline transform transition hover:scale-105 duration-300 ease-in-out"
                                     style="background: linear-gradient(to right, #ee7724, #d8363a, #dd3675);">Back</button>

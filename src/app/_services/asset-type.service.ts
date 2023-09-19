@@ -10,12 +10,11 @@ export class AssetTypeService {
 
   baseUrl
   Url
-  private domian: string | undefined;
 
   constructor(private httpclient: HttpClient) {
-    this.baseUrl = environment.domain + "asset-types";
-    this.Url = environment.domain + "assets";
-   }
+    this.baseUrl = environment.backendbaseUrl + "/asset-types";
+    this.Url = environment.backendbaseUrl + "/assets";
+  }
 
   getAllAssetTypes(): Observable<any[]> {
     return this.httpclient.get<any[]>(this.baseUrl + "/all");
@@ -36,5 +35,5 @@ export class AssetTypeService {
   getAssetsByAssetTypeName(typeName: string): Observable<any[]> {
     return this.httpclient.get<any[]>(`${this.Url}/byAssetTypeName/${typeName}`);
   }
-  
+
 }

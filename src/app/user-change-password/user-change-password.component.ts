@@ -22,18 +22,18 @@ export class UserChangePasswordComponent {
       this.errorMessage = 'New and confirm passwords do not match.';
       return;
     }
-  
+
     if (this.newPassword.length < 6) {
       this.errorMessage = 'New password must have at least 6 characters.';
       return;
     }
-  
+
     this.authService.changePassword(this.oldPassword, this.newPassword)
       .subscribe(
         (response) => {
           this.errorMessage = '';
           this.clearForm();
-  
+
           this.snackBar.open('Successfully updated password', 'Close', {
             duration: 3000,
             horizontalPosition: 'center',
@@ -53,8 +53,6 @@ export class UserChangePasswordComponent {
         }
       );
   }
-  
-  
 
   clearForm() {
     this.oldPassword = '';

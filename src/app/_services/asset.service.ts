@@ -10,10 +10,9 @@ import { environment } from 'src/environments/environment.development';
 export class AssetService {
 
   baseUrl
-  private domian: string | undefined;
 
-  constructor(private httpclient: HttpClient) { 
-    this.baseUrl = environment.domain + "assets";
+  constructor(private httpclient: HttpClient) {
+    this.baseUrl = environment.backendbaseUrl + "/assets";
   }
 
   getAllAssets(): Observable<any[]> {

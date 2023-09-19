@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { UserLoginComponent } from './user-login/user-login.component';
@@ -62,7 +61,7 @@ import { AvailableAssetsListComponent } from './available-assets-list/available-
     HttpClientModule,
     RouterModule,
     BrowserAnimationsModule,
-    BrowserModule, 
+    BrowserModule,
     ReactiveFormsModule,
     MatDialogModule,
     MatSnackBarModule,
@@ -73,9 +72,9 @@ import { AvailableAssetsListComponent } from './available-assets-list/available-
     AuthGuard,
     AssetTypeService,
     {
-      provide:HTTP_INTERCEPTORS,
+      provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
-      multi:true
+      multi: true
     },
     UserService
   ],

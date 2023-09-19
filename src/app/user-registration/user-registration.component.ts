@@ -22,11 +22,11 @@ export class UserRegistrationComponent implements OnInit {
     password: '',
   };
 
-  constructor(private userService: UserService, private snackBar: MatSnackBar, private fb: FormBuilder, private router: Router) { 
+  constructor(private userService: UserService, private snackBar: MatSnackBar, private fb: FormBuilder, private router: Router) {
     this.registrationForm = this.fb.group({
       firstName: ['', [Validators.required, Validators.maxLength(10), this.noNumbersValidator]],
       lastName: ['', [Validators.required, this.noNumbersValidator]],
-      phoneno: ['', [Validators.required, this.onlyNumbersValidator , Validators.pattern(/^\d{9}$/)]],
+      phoneno: ['', [Validators.required, this.onlyNumbersValidator, Validators.pattern(/^\d{9}$/)]],
       username: ['', [Validators.required, Validators.maxLength(10)]],
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.maxLength(50), Validators.minLength(6)]],
@@ -34,7 +34,7 @@ export class UserRegistrationComponent implements OnInit {
   }
 
   ngOnInit() {
-    
+
   }
 
   onlyNumbersValidator(control: AbstractControl): { [key: string]: any } | null {

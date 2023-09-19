@@ -37,7 +37,25 @@
                     <h2 class="w-full my-2 text-5xl font-semibold leading-tight text-center text-gray-600">
                         Available Assets
                     </h2>
-                    <div class="mt-10">
+                    <div>
+                        <div class="flex ">
+                            <label for="table-search" class="sr-only">Search</label>
+                            <div class="relative mt-4">
+                                <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                                    <svg class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="currentColor"
+                                        viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                        <path fill-rule="evenodd"
+                                            d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+                                            clip-rule="evenodd"></path>
+                                    </svg>
+                                </div>
+                                <input type="text" id="table-search" [(ngModel)]="searchTerm" (input)="filterAssets()"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-80 pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 mb-2"
+                                    placeholder="Search for Available Assets" name="searchAssetTypeText">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-4">
                         <div class="relative overflow-x-auto shadow-md sm:rounded-lg mb-5">
                             <table class="w-full text-sm text-center text-gray-500 dark:text-gray-400">
                                 <thead
@@ -57,40 +75,48 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <ng-container *ngFor="let asset of assets">
-                                      <ng-container *ngIf="asset.assetStatus === 'AVAILABLE'">
-                                        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                                          <td class="w-4 p-4"></td>
-                                          <th scope="row" class="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap">
-                                            {{ asset.assetName }}
-                                          </th>
-                                          <td class="px-6 py-4">
-                                            {{ asset.assetType.typeName }}
-                                          </td>
-                                          <td class="px-6 py-4">
-                                            <span [ngClass]="{
-                                              'bg-green-500 text-white py-1 px-2 rounded-full': asset.assetStatus === 'AVAILABLE'
-                                            }">{{ asset.assetStatus }}</span>
-                                          </td>
-                                        </tr>
-                                      </ng-container>
+                                    <ng-container *ngFor="let asset of getPaginatedAssets()">
+                                        <ng-container *ngIf="asset.assetStatus === 'AVAILABLE'">
+                                            <tr
+                                                class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                                <td class="w-4 p-4"></td>
+                                                <th scope="row"
+                                                    class="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap">
+                                                    {{ asset.assetName }}
+                                                </th>
+                                                <td class="px-6 py-4">
+                                                    {{ asset.assetType.typeName }}
+                                                </td>
+                                                <td class="px-6 py-4">
+                                                    <span
+                                                        [ngClass]="{
+                                              'bg-green-500 text-white py-1 px-2 rounded-full': asset.assetStatus === 'AVAILABLE'}">
+                                                        {{ asset.assetStatus }}</span>
+                                                </td>
+                                            </tr>
+                                        </ng-container>
                                     </ng-container>
-                                    <ng-container *ngIf="assets.length === 0">
-                                      <tr>
-                                        <td colspan="3" class="text-gray-500 dark:text-gray-400 text-center py-4">
-                                          You have not assigned any assets.
-                                        </td>
-                                      </tr>
-                                    </ng-container>
-                                  </tbody>                                  
+                                </tbody>
                             </table>
+                        </div>
+                        <div class="mt-4 flex justify-center">
+                            <button *ngIf="currentPage > 1" class="mx-2 text-blue-600 hover:text-blue-800"
+                                (click)="changePage(currentPage - 1)">Previous</button>
+                            <ng-container *ngFor="let page of getPageNumbers()">
+                                <button class="mx-2 text-blue-600 hover:text-blue-800"
+                                    [class.font-semibold]="currentPage === page" (click)="changePage(page)">
+                                    {{ page }}
+                                </button>
+                            </ng-container>
+                            <button *ngIf="currentPage < getTotalPages()" class="mx-2 text-blue-600 hover:text-blue-800"
+                                (click)="changePage(currentPage + 1)">Next</button>
                         </div>
                         <p class="mt-5 text-gray-500">Present a comprehensive tableau of My Assets, showcasing their
                             intricate details
                             within an organized framework for easy perusal.
                         </p>
                         <div class="mt-6">
-                            <a href="http://localhost:4200/user-dashboard">
+                            <a routerLink="/user-dashboard">
                                 <button type="submit"
                                     class="mt-1 ml-2 text-white focus:ring-4  font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center shadow-lg focus:outline-none focus:shadow-outline transform transition hover:scale-105 duration-300 ease-in-out"
                                     style="background: linear-gradient(to right, #ee7724, #d8363a, #dd3675);">Back</button>

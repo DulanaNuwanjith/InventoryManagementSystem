@@ -25,19 +25,20 @@ const routes: Routes = [
     component: HomePageComponent
   },
   {
-    path:'registration',
+    path: 'registration',
+    canActivate: [AuthGuard],
     component: UserRegistrationComponent
   },
   {
     path: 'login',
-    canActivate:[AuthGuard],
+    canActivate: [AuthGuard],
     component: UserLoginComponent,
   },
   {
     path: 'dashboard',
     component: DashboardComponent,
-    canActivate:[AuthGuard],
-    data: {roles:['ROLE_ADMIN']}
+    canActivate: [AuthGuard],
+    data: { roles: ['ROLE_ADMIN'] }
   },
   {
     path: 'user-management',
@@ -54,8 +55,8 @@ const routes: Routes = [
   {
     path: 'user-dashboard',
     component: UserDashboardComponent,
-    canActivate:[AuthGuard],
-    data: {roles:['ROLE_USER']}
+    canActivate: [AuthGuard],
+    data: { roles: ['ROLE_USER'] }
   },
   {
     path: 'user-profile-management',

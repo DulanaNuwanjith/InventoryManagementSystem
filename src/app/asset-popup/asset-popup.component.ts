@@ -23,7 +23,6 @@ export class AssetPopupComponent {
     }
     console.log('popup');
   }
-  
 
   getStatusDisplayName(assetStatus: string): string {
     switch (assetStatus) {
@@ -36,6 +35,6 @@ export class AssetPopupComponent {
       default:
         return 'Other';
     }
-  } 
-  
+  }
+
 }

@@ -26,7 +26,7 @@ export class AssetTypeManagementComponent implements OnInit {
   filteredAssetTypes: AssetType[] = [];
   typeName: string = '';
   currentPage: number = 1;
-  pageSize: number = 6; 
+  pageSize: number = 6;
 
   assetTypeData = {
     typeName: '',
@@ -47,11 +47,20 @@ export class AssetTypeManagementComponent implements OnInit {
   }
 
   addAssetType(addAssetTypeForm: NgForm) {
-    if (addAssetTypeForm.invalid) {
+    const assetTypeName = this.assetTypeData?.typeName?.trim();
+
+    if (!assetTypeName || assetTypeName.length < 4) {
+      const errorMessage = assetTypeName ? 'Asset type must be at least 4 characters' : 'Asset type cannot be empty';
+      this.snackBar.open(errorMessage, 'Close', {
+        duration: 3000,
+        horizontalPosition: 'center',
+        verticalPosition: 'top',
+        panelClass: 'error-snackbar',
+      });
       return;
     }
 
-    this.assetTypeService.addAssetType(this.assetTypeData).subscribe(
+    this.assetTypeService.addAssetType({ typeName: assetTypeName }).subscribe(
       (response) => {
         console.log('Asset type Add successful:', response);
         addAssetTypeForm.resetForm();
@@ -66,10 +75,15 @@ export class AssetTypeManagementComponent implements OnInit {
       },
       (error) => {
         console.error('Asset type Add failed:', error);
+        this.snackBar.open('Failed to add asset type', 'Close', {
+          duration: 3000,
+          horizontalPosition: 'center',
+          verticalPosition: 'top',
+          panelClass: 'error-snackbar',
+        });
       }
     );
   }
-
 
   searchAssetType() {
     if (this.searchAssetTypeText.trim() === '') {
@@ -85,7 +99,6 @@ export class AssetTypeManagementComponent implements OnInit {
       });
     }
   }
-
 
   selectSuggestion(suggestion: string) {
     this.searchAssetTypeText = suggestion;
@@ -146,7 +159,7 @@ export class AssetTypeManagementComponent implements OnInit {
     const endIndex = startIndex + this.pageSize;
     return this.filteredAssetTypes.slice(startIndex, endIndex);
   }
-  
+
   changePage(newPage: number) {
     if (newPage >= 1 && newPage <= Math.ceil(this.filteredAssetTypes.length / this.pageSize)) {
       this.currentPage = newPage;
