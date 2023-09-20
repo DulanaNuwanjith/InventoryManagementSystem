@@ -20,26 +20,26 @@ export class DeleteConfirmationDialogComponent {
         this.dialogRef.close(false);
     }
 
-    onYesClick(): void {
-        if (this.adminPassword === 'delete123') {
-            this.snackBar.open('Successfully deleted', 'Close', {
-                duration: 3000,
-                horizontalPosition: 'center',
-                verticalPosition: 'top',
-            });
-            this.dialogRef.close(true);
-        } else {
-            this.showError = true;
-        }
-    }
-
     // onYesClick(): void {
-    //     this.snackBar.open('Successfully deleted', 'Close', {
-    //         duration: 3000,
-    //         horizontalPosition: 'center',
-    //         verticalPosition: 'top',
-    //     });
-    //     this.dialogRef.close(true);
+    //     if (this.adminPassword === 'delete123') {
+    //         this.snackBar.open('Successfully deleted', 'Close', {
+    //             duration: 3000,
+    //             horizontalPosition: 'center',
+    //             verticalPosition: 'top',
+    //         });
+    //         this.dialogRef.close(true);
+    //     } else {
+    //         this.showError = true;
+    //     }
     // }
+
+    onYesClick(): void {
+        this.snackBar.open('Successfully deleted', 'Close', {
+            duration: 3000,
+            horizontalPosition: 'center',
+            verticalPosition: 'top',
+        });
+        this.dialogRef.close(true);
+    }
 
 }

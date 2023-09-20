@@ -12,7 +12,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr *ngFor="let asset of assets" class="bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-600">
+            <tr *ngFor="let asset of assets" class="bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-600 ">
                 <td scope="col" class="p-6"></td>
                 <td scope="row" class="px-8 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap">
                     {{ asset.assetName }}
@@ -33,7 +33,7 @@
             </tr>
             <ng-container *ngIf="assets.length === 0">
                 <tr>
-                    <td colspan="3" class="text-gray-500 dark:text-gray-400 text-center py-4">
+                    <td colspan="3" class="text-red-600 dark:text-gray-400 py-8 ">
                         This Asset type has not been assigned any assets.
                     </td>
                 </tr>
