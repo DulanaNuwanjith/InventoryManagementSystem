@@ -39,23 +39,25 @@ export class UserManagementComponent implements OnInit {
     });
   }
 
-  searchUsers() {
-    if (this.searchText.trim() === '') {
+  onSearchInputChange(): void {
+    const searchTerms = this.searchText.trim().toLowerCase().split(' ');
+
+    if (searchTerms.length === 0) {
       this.loadUsers();
     } else {
-      const searchTerms = this.searchText.trim().toLowerCase().split(' ');
-
-      this.users = this.users.filter((user) => {
-        return searchTerms.some((term) => {
-          if (user.id.toString().toLowerCase().includes(term)) {
-            return true;
-          }
-
-          return Object.values(user).some((value) => {
-            if (typeof value === 'string') {
-              return value.toLowerCase().includes(term);
+      this.userService.getUsers().subscribe((data) => {
+        this.users = data.filter((user) => {
+          return searchTerms.every((term) => {
+            if (!isNaN(Number(term))) {
+              return user.id.toString().toLowerCase().includes(term);
+            } else {
+              return Object.values(user).some((value) => {
+                if (typeof value === 'string') {
+                  return value.toLowerCase().includes(term);
+                }
+                return false;
+              });
             }
-            return false;
           });
         });
       });
@@ -64,7 +66,7 @@ export class UserManagementComponent implements OnInit {
 
   selectSuggestion(suggestion: string) {
     this.searchText = suggestion;
-    this.searchUsers();
+    this.onSearchInputChange();
     this.suggestions = [];
   }
 

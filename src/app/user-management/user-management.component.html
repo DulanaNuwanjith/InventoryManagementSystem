@@ -54,8 +54,8 @@
                                         </div>
                                         <input type="text" id="table-search"
                                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-80 pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 mb-2"
-                                            placeholder="Search for User details" [(ngModel)]="searchText"
-                                            (input)="searchUsers()">
+                                            placeholder="Search for User details" [(ngModel)]="searchText" (input)="onSearchInputChange()"
+                                            >
                                         <div class="absolute z-10 mt-10" *ngIf="suggestions.length > 0">
                                             <ul class="bg-white border border-gray-300 dark:bg-gray-800">
                                                 <li *ngFor="let suggestion of suggestions"
